@@ -7,6 +7,8 @@
 require('./bootstrap');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import {store} from './store/store'
+console.log(store)
 Vue.use(VueRouter)
 
 import {routes} from './routes';
@@ -17,12 +19,13 @@ window.User = User;
 
 const router = new VueRouter({
     routes,
-    mode:'history'
+    mode:'history',
 })
 
 
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store
 });

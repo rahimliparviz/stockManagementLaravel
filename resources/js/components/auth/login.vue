@@ -7,7 +7,7 @@
             <div class="col-lg-12">
               <div class="login-form">
                 <div class="text-center">
-                  <h1 class="h4 text-gray-900 mb-4">Login</h1>
+                  <h1 class="h4 text-gray-900 mb-4">Login </h1>
                 </div>
                 <form class="user" @submit.prevent="login">
                   <div class="form-group">
@@ -57,13 +57,22 @@
         </div>
       </div>
     </div>
+
+
+   <h1 v-if="token">{{token}}</h1>
+    <h1 v-else>no token</h1>
+
+    <p @click="setToken({'key1': 'value1', 'key2': 'value2'})">Fake button</p>
+
   </div>
 </template>
 
 <script>
+import {mapActions,mapGetters} from 'vuex'
 export default {
   data() {
     return {
+      test:'test',
       form: {
         email: "admin@admin.az",
         password: "12345"
@@ -72,31 +81,45 @@ export default {
   },
 
   methods: {
-    login() {
-      axios
-        .post("/api/auth/login", this.form)
-        .then(res => {
-          console.log(res);
-          User.responseAfterLogin(res);
-          // Toast.fire({
-          //   icon: "success",
-          //   title: "Signed in successfully"
-          // });
-          this.$router.push({ name: "home" });
-        })
-        .catch(error => (this.errors = error.response.data.errors))
-        .catch
-        // Toast.fire({
-        //   icon: "warning",
-        //   title: "Invalid Email or Password"
-        // })
-        ();
-    }
+    // login() {
+    //   axios
+    //     .post("/api/auth/login", this.form)
+    //     .then(res => {
+    //       console.log(res);
+    //       User.responseAfterLogin(res);
+    //       // Toast.fire({
+    //       //   icon: "success",
+    //       //   title: "Signed in successfully"
+    //       // });
+    //       this.$router.push({ name: "home" });
+    //     })
+    //     .catch(error => (this.errors = error.response.data.errors))
+    //     .catch
+    //     // Toast.fire({
+    //     //   icon: "warning",
+    //     //   title: "Invalid Email or Password"
+    //     // })
+    //     ();
+    // },
+    login(){
+      this.$store.dispatch('login', this.form)
+    },
+    ...mapActions({
+        setToken:'setToken',
+        // login:'login'
+    })
   },
   created() {
-    if (User.loggedIn()) {
+    console.log(this.token)
+    if (this.token) {
       this.$router.push({ name: "home" });
     }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'token'
+    ])
+   
+  },
 };
 </script>
