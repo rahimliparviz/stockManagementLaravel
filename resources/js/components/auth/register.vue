@@ -9,46 +9,54 @@
                 <div class="text-center">
                   <h1 class="h4 text-gray-900 mb-4">Register</h1>
                 </div>
-                <form>
+                <form @submit.prevent="register">
                   <div class="form-group">
-                    <label>First Name</label>
                     <input
                       type="text"
                       class="form-control"
                       id="exampleInputFirstName"
-                      placeholder="Enter First Name"
+                      placeholder="Enter Full Name"
+                      v-model="form.name"
                     />
+                    <small class="text-danger" v-if='errors.name'>{{errors.name[0]}}</small>
+                                   <!-- <small class="text-danger" v-if='errors.password'>{{errors.password[0]}}</small> -->
+
                   </div>
 
                   <div class="form-group">
-                    <label>Email</label>
                     <input
                       type="email"
                       class="form-control"
                       id="exampleInputEmail"
                       aria-describedby="emailHelp"
                       placeholder="Enter Email Address"
+                      v-model="form.email"
+
                     />
+                    <small class="text-danger" v-if='errors.email'>{{errors.email[0]}}</small>
                   </div>
                   <div class="form-group">
-                    <label>Password</label>
                     <input
                       type="password"
                       class="form-control"
                       id="exampleInputPassword"
                       placeholder="Password"
+                      v-model="form.password"
                     />
+                    <small class="text-danger" v-if='errors.password'>{{errors.password[0]}}</small>
+
                   </div>
                   <div class="form-group">
-                    <label>Repeat Password</label>
                     <input
                       type="password"
                       class="form-control"
                       id="exampleInputPasswordRepeat"
-                      placeholder="Repeat Password"
+                      placeholder="Confirm Password"
+                      v-model="form.password_confirmation"
                     />
+
                   </div>
-                  <div class="form-group">
+                  <div class="form-group" @click='register'>
                     <button type="submit" class="btn btn-primary btn-block">Register</button>
                   </div>
                   <hr />
@@ -68,11 +76,39 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
-    created() {
-    if (User.loggedIn()) {
+  data() {
+    return {
+      errors:{},
+      form: {
+        name:'Nocolay hell',
+        email: "admin@admin.az",
+        password: "123456",
+        password_confirmation:"123456",
+      }
+    };
+  },
+
+  methods: {
+    register(){
+          this.$store.dispatch('register', {form:this.form,router:this.$router})
+          .then(response => {}, error => {
+            console.log(error)
+                this.errors = error.data.errors;
+            })
+    },
+  },
+  created() {
+    if (this.token) {
       this.$router.push({ name: "home" });
     }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'token'
+    ])
+   
+  },
 };
 </script>

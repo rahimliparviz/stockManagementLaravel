@@ -1,13 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import agent from "../api/agent";
+import Token from "../helpers/Token";
+import router from '../router/roter'
+
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state:{
-        user:null,
-        token:null
+        user:localStorage.getItem('user'),
+        token: localStorage.getItem('token')
     },
     getters:{
         user: state=>{
@@ -18,30 +21,103 @@ export const store = new Vuex.Store({
         },
         
     },mutations:{
-        setToken: (state,payload)=>{
-            state.token = payload
-        },
+
+        //Auth
         login:(state,payload)=>{
-            state.token = payload.access_token
-            console.log(state.token, payload.access_token)
-        }
+           
+            if(Token.isValid(payload.res.access_token)){
+                state.token = payload.res.access_token
+                localStorage.setItem('token',payload.res.access_token)
+                state.user = payload.res.user;
+                localStorage.setItem('user',payload.res.user)
+
+                payload.router.push({ name: "home" })
+                Toast.fire({
+                    icon:'success',
+                    title:'Signed in successfully!'
+                })
+            }else{
+                Toast.fire({
+                    icon:'warning',
+                    title:'Token is invalid!'
+                })
+            }
+
+        },
+        logout:(state)=>{
+            state.token = null;
+            state.user = null;
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+
+            Toast.fire({
+                icon:'success',
+                title:'Logout successfully!'
+            })
+        },
+        //Auth end
+
+        //Employee
+        // createEmployee:(state,payload)=>{
+        // console.log(payload)
+        // },
+
+        // getEmployees:()=>{
+
+        // }
+        //Employee end
+
     },
     actions:{
-        setToken:({commit},payload)=>{
-            commit('setToken',payload.key2)
-        },
+      //Auth
+        login: ({ commit }, payload)=> {
+            return new Promise((resolve, reject) => {
+                agent.User.login(payload.form)
+                .then(res => {
+                    commit('login',{res:res,router:payload.router});
+                resolve();
+              }, (error) => reject(error));
+            });
+          },
+          register: ({ commit }, payload)=> {
+            return new Promise((resolve, reject) => {
+                agent.User.register(payload.form)
+                .then(res => {
+                    commit('login',{res:res,router:payload.router});
+                resolve();
+              }, (error) => reject(error));
+            });
+          },
+          //Auth end
 
-        login:({commit},payload)=>{
+          //Employee 
+        //   createEmployee: ({ commit }, payload)=> {
+        //     return new Promise((resolve, reject) => {
+        //         // console.log(payload)
+        //         agent.Employee.create(payload)
+        //         .then(res => {
+        //             // console.log(res)
+        //             commit('createEmployee',{res:res});
+        //         resolve();
+        //       }, (error) => {
+        //         //   console.log(error)
+        //         reject(error)
+        //       });
+        //     });
+        //   },
 
-            agent.User.login(payload)
-            .then(res => {
-                commit('login',res)          
-            }).catch(err =>{
-                console.log(err)
-            })
-        
-        },
-        
-   
+        //   getEmployees: ({ commit })=>{
+        //     return new Promise((resolve, reject) => {
+        //         agent.Employee.list()
+        //         .then(res => {
+        //             commit('');
+        //         resolve();
+        //       }, (error) => {
+        //         reject(error)
+        //       });
+        //     });
+        //   }
+
+          //Employee end
     }
 })

@@ -31,3 +31,8 @@ Route::group([
     Route::post('signup', 'AuthController@signup');
 
 });
+
+Route::apiResource('/employee', 'API\EmployeeController');
+Route::apiResource('/supplier', 'API\SupplierController');
+Route::apiResource('/category', 'API\CategoryController');
+Route::apiResource('/product', 'API\ProductController');

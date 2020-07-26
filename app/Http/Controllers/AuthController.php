@@ -29,6 +29,12 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        $validateData = $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+            
+            ]);
+            
         $credentials = $request->only('email', 'password');
 
         if ($token = $this->guard()->attempt($credentials)) {
@@ -103,9 +109,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,
-            'name' => auth()->user()->name,
-            'name_id' => auth()->user()->id,
-            'email' => auth()->user()->email,
+            'user'=>auth()->user()->only(['id', 'name', 'email'])
         ]);
     }
 

@@ -19,6 +19,7 @@
                       placeholder="Enter Email Address"
                       v-model="form.email"
                     />
+                    <small class="text-danger" v-if='errors.email'>{{errors.email[0]}}</small>
                   </div>
                   <div class="form-group">
                     <input
@@ -28,6 +29,8 @@
                       placeholder="Password"
                       v-model="form.password"
                     />
+               <small class="text-danger" v-if='errors.password'>{{errors.password[0]}}</small>
+
                   </div>
                   <div class="form-group">
                     <div class="custom-control custom-checkbox small" style="line-height: 1.5rem;">
@@ -62,7 +65,6 @@
    <h1 v-if="token">{{token}}</h1>
     <h1 v-else>no token</h1>
 
-    <p @click="setToken({'key1': 'value1', 'key2': 'value2'})">Fake button</p>
 
   </div>
 </template>
@@ -72,7 +74,7 @@ import {mapActions,mapGetters} from 'vuex'
 export default {
   data() {
     return {
-      test:'test',
+      errors:{},
       form: {
         email: "admin@admin.az",
         password: "12345"
@@ -81,36 +83,15 @@ export default {
   },
 
   methods: {
-    // login() {
-    //   axios
-    //     .post("/api/auth/login", this.form)
-    //     .then(res => {
-    //       console.log(res);
-    //       User.responseAfterLogin(res);
-    //       // Toast.fire({
-    //       //   icon: "success",
-    //       //   title: "Signed in successfully"
-    //       // });
-    //       this.$router.push({ name: "home" });
-    //     })
-    //     .catch(error => (this.errors = error.response.data.errors))
-    //     .catch
-    //     // Toast.fire({
-    //     //   icon: "warning",
-    //     //   title: "Invalid Email or Password"
-    //     // })
-    //     ();
-    // },
     login(){
-      this.$store.dispatch('login', this.form)
+          this.$store.dispatch('login', {form:this.form,router:this.$router})
+          .then(response => {
+          }, error => {
+                this.errors = error.data.errors;
+            })
     },
-    ...mapActions({
-        setToken:'setToken',
-        // login:'login'
-    })
   },
   created() {
-    console.log(this.token)
     if (this.token) {
       this.$router.push({ name: "home" });
     }

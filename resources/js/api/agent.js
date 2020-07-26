@@ -6,6 +6,7 @@
 // import { IUser, IUserFormValues } from '../models/user';
 
 import axios from "axios";
+import router from '../router/roter'
 
 
 axios.defaults.baseURL ='/api';
@@ -20,28 +21,42 @@ axios.defaults.baseURL ='/api';
 // })
 
 
-// axios.interceptors.response.use(undefined, error => {
+axios.interceptors.response.use(undefined, error => {
    
-//     if (error.message === 'Network Error' && !error.response) {
-//         toast.error('Network error - make sure API is running!')
-//     }
-//     const {status, data, config,headers} = error.response;
-//     if (status === 404) {
-//         history.push('/notfound')
-//     }
-//     if (status === 401 && headers['www-authenticate'] === 'Bearer error="invalid_token", error_description="The token is expired"') {
-//         window.localStorage.removeItem('jwt');
-//         history.push('/')
-//         toast.info('Your session has expired, please login again')
-//       }
-//     if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) {
-//         history.push('/notfound')
-//     }
-//     if (status === 500) {
-//         toast.error('Server error - check the terminal for more info!')
-//     }
-//     throw error.response;
-// })
+    if (error.message === 'Network Error' && !error.response) {
+        toast.error('Network error - make sure API is running!')
+    }
+    const {status, data, config,headers} = error.response;
+  
+    if (status === 404) {
+        router.push('/notfound')
+    }
+    if (status === 401) {
+        Toast.fire({
+            icon:'warning',
+            title:'Password or mail is invalid'
+        })
+    }
+    if (status === 401 && headers['www-authenticate'] === 'Bearer error="invalid_token", error_description="The token is expired"') {
+        window.localStorage.removeItem('jwt');
+        router.push('/')
+        Toast.fire({
+            icon:'warning',
+            title:'Your session has expired, please login again'
+        })
+      }
+    // if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) {
+    //     router.push('/notfound')
+
+    // }
+    if (status === 500) {
+        Toast.fire({
+            icon:'warning',
+            title:'Server error - check the terminal for more info!'
+        })
+    }
+    throw error.response;
+})
 
 const responseBody = (response)=>response.data;
 
@@ -65,10 +80,42 @@ const requests = {
 //     unattend: (id: string) => requests.del(`/activities/${id}/attend`)
 //   };
 
+const Employee = {
+    list: () => requests.get(`/employee`),
+    details: (id) => requests.get(`/employee/${id}`),
+    create: (employee) => requests.post('/employee', employee),
+    update: (employee) =>requests.put(`/employee/${employee.id}`, employee),
+    delete: (id) => requests.del(`/employee/${id}`),
+  };
+
+  const Supplier = {
+    list: () => requests.get(`/supplier`),
+    details: (id) => requests.get(`/supplier/${id}`),
+    create: (supplier) => requests.post('/supplier', supplier),
+    update: (supplier) =>requests.put(`/supplier/${supplier.id}`, supplier),
+    delete: (id) => requests.del(`/supplier/${id}`),
+  };
+
+  const Category = {
+    list: () => requests.get(`/category`),
+    details: (id) => requests.get(`/category/${id}`),
+    create: (category) => requests.post('/category', category),
+    update: (category) =>requests.put(`/category/${category.id}`, category),
+    delete: (id) => requests.del(`/category/${id}`),
+  };
+
+  const Product = {
+    list: () => requests.get(`/product`),
+    details: (id) => requests.get(`/product/${id}`),
+    create: (product) => requests.post('/product', product),
+    update: (product) =>requests.put(`/product/${product.id}`, product),
+    delete: (id) => requests.del(`/product/${id}`),
+  };
+
 const User = {
     // current: (): Promise<IUser> => requests.get('/user'),
     login: (user) => requests.post(`/auth/login`, user),
-    register: (user) => requests.post(`/auth/register`, user),
+    register: (user) => requests.post(`/auth/signup`, user),
 }
 
 // const Profiles = {
@@ -87,5 +134,9 @@ const User = {
 export default {
     // Activities,
     User,
+    Employee,
+    Supplier,
+    Category,
+    Product
     // Profiles
 }
