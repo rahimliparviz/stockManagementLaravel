@@ -3,7 +3,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/add-supplier" class="btn btn-primary">Add Supplier </router-link>
+  <router-link to="/store-category" class="btn btn-primary">Add Category </router-link>
    
  </div>
 <br>
@@ -17,31 +17,24 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Supplier List</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Category List</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Name</th>
-                        <th>Photo</th>
-                        <th>Phone</th>
-                        <th>Shop Name</th>
-                        <th>Email</th>
-                        <th>Action</th>
+                        <th>Category Name</th>
+                          <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="supplier in filtersearch" :key="supplier.id">
-                        <td> {{ supplier.name }} </td>
-                        <td><img :src="supplier.photo" id="em_photo"></td>
-                        <td>{{ supplier.phone }}</td>
-                        <td>{{ supplier.shopname }}</td>
-                        <td>{{ supplier.email }}</td>
+                      <tr v-for="category in filtersearch" :key="category.id">
+                        <td> {{ category.category_name }} </td>
+                       
             <td>
-   <router-link :to="{name: 'edit-supplier', params:{id:supplier.id}}" class="btn btn-sm btn-primary">Edit</router-link>
+   <router-link :to="{name: 'edit-category', params:{id:category.id}}" class="btn btn-sm btn-primary">Edit</router-link>
 
- <a @click="deleteSupplier(supplier.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
+ <a @click="deleteCategory(category.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
             </td>
                       </tr>
                     
@@ -75,7 +68,7 @@
     },
     data(){
       return{
-        suppliers:[],
+        categories:[],
         searchTerm:''
       }
     },
@@ -84,21 +77,23 @@
       'token'
     ]),
       filtersearch(){
-        return this.suppliers.filter(supplier => {
-          return supplier.name.match(this.searchTerm)
+        return this.categories.filter(category  => {
+          console.log(category)
+          return category.category_name.match(this.searchTerm)
         }) 
       }
     },
  
   methods:{
-    allSupplier(){
-      agent.Supplier.list()
+    allCategories(){
+      agent.Category.list()
       .then((data) => {
-        this.suppliers = data
+        
+        this.categories = data
       })
       .catch()
     },
-  deleteSupplier(id){
+  deleteCategory (id){
              Swal.fire({
               title: 'Are you sure?',
               text: "You won't be able to revert this!",
@@ -109,15 +104,15 @@
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
               if (result.value) {
-                agent.Supplier.delete(id)
+                agent.Category.delete(id)
                 // axios.delete('/api/employee/'+id)
                .then(() => {
-                this.suppliers = this.suppliers.filter(supplier => {
-                  return supplier.id != id
+                this.categories = this.categories.filter(category  => {
+                  return category .id != id
                 })
                })
                .catch(() => {
-                this.$router.push({name: 'suppliers'})
+                this.$router.push({name: 'category'})
                })
                 Swal.fire(
                   'Deleted!',
@@ -129,7 +124,7 @@
   } 
   },
   created(){
-    this.allSupplier();
+    this.allCategories();
   } 
   
   } 

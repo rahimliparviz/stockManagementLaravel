@@ -22,12 +22,12 @@ axios.defaults.baseURL ='/api';
 
 
 axios.interceptors.response.use(undefined, error => {
-   
+
     if (error.message === 'Network Error' && !error.response) {
         toast.error('Network error - make sure API is running!')
     }
     const {status, data, config,headers} = error.response;
-  
+
     if (status === 404) {
         router.push('/notfound')
     }
@@ -112,6 +112,63 @@ const Employee = {
     delete: (id) => requests.del(`/product/${id}`),
   };
 
+  const Expense = {
+    list: () => requests.get(`/expense`),
+    details: (id) => requests.get(`/expense/${id}`),
+    create: (expense) => requests.post('/expense', expense),
+    update: (expense) =>requests.put(`/expense/${expense.id}`, expense),
+    delete: (id) => requests.del(`/expense/${id}`),
+  };
+
+  const Customer = {
+    list: () => requests.get(`/customer`),
+    details: (id) => requests.get(`/customer/${id}`),
+    create: (customer) => requests.post('/customer', customer),
+    update: (customer) =>requests.put(`/customer/${customer.id}`, customer),
+    delete: (id) => requests.del(`/customer/${id}`),
+  };
+
+  const Salary = {
+    list: () => requests.get(`/salary`),
+    pay: (data) => requests.post(`/salary/pay`,data),
+    update: (data) => requests.post(`/salary/update/${data.id}`,data),
+    edit: (id) => requests.get(`/edit/salary/${id}`),
+    view: (id) => requests.get(`/salary/view/${id}`),
+  };
+
+  const Stock = {
+      update: (data) => requests.post(`/stock/update/${data.id}`,data),
+  };
+
+    const Pos = {
+        sell: () => requests.get(`/today/sell`),
+        income: () => requests.get(`/today/income`),
+        due: () => requests.get(`/today/due`),
+        expense: () => requests.get(`/today/expense`),
+        stockOut: () => requests.get(`/today/stock-out`),
+        categoryProduct: (id) => requests.get(`category/products/${id}`),
+        orderDone: () => requests.post(`/order-done/`),
+    };
+
+    const Regulations = {
+        list: () => requests.get(`/regulations`),
+    }
+
+const Order = {
+    list: () => requests.get(`/orders`),
+    details: (id) => requests.get(`/order/details/${id}`),
+    allDetails: (id) => requests.get(`/order/all-order-details/${id}`),
+    search:()=>requests.post('/search/order')
+};
+
+const Cart = {
+    add: (id) => requests.get(`/cart/add/${id}`),
+    remove: (id) => requests.get(`/cart/remove/${id}`),
+    products: () => requests.get(`/cart/products`),
+    increment: (id) => requests.get(`/cart/product/increment/${id}`),
+    decrement: (id) => requests.get(`/cart/product/decrement/${id}`),
+};
+
 const User = {
     // current: (): Promise<IUser> => requests.get('/user'),
     login: (user) => requests.post(`/auth/login`, user),
@@ -137,6 +194,14 @@ export default {
     Employee,
     Supplier,
     Category,
-    Product
+    Product,
+    Expense,
+    Customer,
+    Salary,
+    Stock,
+    Pos,
+    Regulations,
+    Order,
+    Cart
     // Profiles
 }

@@ -16,20 +16,22 @@ class EmployeeController extends Controller
        return response()->json($employee);
     }
 
-   
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    //TODO : image upload ucun helper function yarat
     public function store(Request $request)
     {
-
         $validateData = $request->validate([
          'name' => 'required|unique:employees|max:255',
          'email' => 'required',
          'phone' => 'required|unique:employees',
+         'salary' => 'required|numeric',
 
         ]);
 
@@ -40,7 +42,7 @@ class EmployeeController extends Controller
 
          $name = time().".".$ext;
          $img = Image::make($request->photo)->resize(240,200);
-        
+
          $upload_path = 'backend/employee/';
          $image_url = $upload_path.$name;
          $img->save($image_url);
@@ -49,25 +51,25 @@ class EmployeeController extends Controller
          $employee->name = $request->name;
          $employee->email = $request->email;
          $employee->phone = $request->phone;
-         $employee->sallery = $request->sallery;
+         $employee->salary = $request->salary;
          $employee->address = $request->address;
          $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
          $employee->photo = $image_url;
-         $employee->save(); 
+         $employee->save();
      }else{
         $employee = new Employee;
          $employee->name = $request->name;
          $employee->email = $request->email;
          $employee->phone = $request->phone;
-         $employee->sallery = $request->sallery;
+         $employee->salary = $request->salary;
          $employee->address = $request->address;
          $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
-         
-         $employee->save(); 
 
-     } 
+         $employee->save();
+
+     }
 
 
     }
@@ -84,7 +86,7 @@ class EmployeeController extends Controller
        return response()->json($employee);
     }
 
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -99,7 +101,7 @@ class EmployeeController extends Controller
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['phone'] = $request->phone;
-        $data['sallery'] = $request->sallery;
+        $data['salary'] = $request->salary;
         $data['address'] = $request->address;
         $data['nid'] = $request->nid;
         $data['joining_date'] = $request->joining_date;
@@ -115,7 +117,7 @@ class EmployeeController extends Controller
          $upload_path = 'backend/employee/';
          $image_url = $upload_path.$name;
          $success = $img->save($image_url);
-         
+
          if ($success) {
             $data['photo'] = $image_url;
             $img = Employee::where('id',$id)->first();
@@ -123,7 +125,7 @@ class EmployeeController extends Controller
             $done = unlink($image_path);
             $user  = Employee::where('id',$id)->update($data);
          }
-          
+
         }else{
             $oldphoto = $request->photo;
             $data['photo'] = $oldphoto;

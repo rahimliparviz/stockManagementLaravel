@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DB;
 use App\Models\Product;
 use Image;
 
@@ -26,7 +25,7 @@ class ProductController extends Controller
                     return response()->json($product);
     }
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -40,10 +39,10 @@ class ProductController extends Controller
          'product_code' => 'required|unique:products|max:255',
          'category_id' => 'required',
          'supplier_id' => 'required',
-         'buying_price' => 'required',
-         'selling_price' => 'required',
+         'buying_price' => 'required|numeric',
+         'selling_price' => 'required|numeric',
          'buying_date' => 'required',
-         'product_quantity' => 'required',
+         'product_quantity' => 'required|numeric',
 
         ]);
 
@@ -69,7 +68,7 @@ class ProductController extends Controller
          $product->buying_date = $request->buying_date;
          $product->product_quantity = $request->product_quantity;
          $product->image = $image_url;
-         $product->save(); 
+         $product->save();
      }else{
         $product = new Product;
          $product->category_id = $request->category_id;
@@ -81,11 +80,11 @@ class ProductController extends Controller
          $product->supplier_id = $request->supplier_id;
          $product->buying_date = $request->buying_date;
          $product->product_quantity = $request->product_quantity;
-         
-         $product->save(); 
 
-     } 
- 
+         $product->save();
+
+     }
+
 
 
     }
@@ -102,7 +101,7 @@ class ProductController extends Controller
        return response()->json($product);
     }
 
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -113,6 +112,21 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+                //    dd($request->get('id'));
+
+        $validateData = $request->validate([
+            'product_name' => 'required|max:255',
+            'product_code' => 'required|max:255|unique:products,product_code,'.$request->get('id'),
+            'category_id' => 'required',
+            'supplier_id' => 'required',
+            'buying_price' => 'required|numeric',
+            'selling_price' => 'required|numeric',
+            'buying_date' => 'required',
+            'product_quantity' => 'required|numeric',
+
+           ]);
+
+
        $data = array();
         $data['product_name'] = $request->product_name;
         $data['product_code'] = $request->product_code;
@@ -135,7 +149,7 @@ class ProductController extends Controller
          $upload_path = 'backend/product/';
          $image_url = $upload_path.$name;
          $success = $img->save($image_url);
-         
+
          if ($success) {
             $data['image'] = $image_url;
             $img = Product::where('id',$id)->first();
@@ -143,7 +157,7 @@ class ProductController extends Controller
             $done = unlink($image_path);
             $user  = Product::where('id',$id)->update($data);
          }
-          
+
         }else{
             $oldphoto = $request->image;
             $data['image'] = $oldphoto;
@@ -172,6 +186,12 @@ class ProductController extends Controller
 
 
  public function StockUpdate(Request $request,$id){
+     $validateData = $request->validate([
+         'product_quantity' => 'required|numeric|min:0',
+
+     ]);
+
+
 
     $data = array();
     $data['product_quantity'] = $request->product_quantity;

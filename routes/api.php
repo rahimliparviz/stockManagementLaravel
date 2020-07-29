@@ -10,16 +10,16 @@ use Illuminate\Support\Facades\Route;
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| is assigned the "API" middleware group. Enjoy building your API!
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:API')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::group([
-    'middleware'=>'api',
+    'middleware'=>'API',
    'prefix' => 'auth'
 
 ], function ($router) {
@@ -32,7 +32,52 @@ Route::group([
 
 });
 
-Route::apiResource('/employee', 'API\EmployeeController');
-Route::apiResource('/supplier', 'API\SupplierController');
-Route::apiResource('/category', 'API\CategoryController');
-Route::apiResource('/product', 'API\ProductController');
+Route::APIResource('/employee', 'API\EmployeeController');
+Route::APIResource('/supplier', 'API\SupplierController');
+Route::APIResource('/category', 'API\CategoryController');
+Route::APIResource('/product', 'API\ProductController');
+Route::Post('/stock/update/{id}', 'API\ProductController@StockUpdate');
+Route::APIResource('/expense', 'API\ExpenseController');
+Route::APIResource('/customer', 'API\CustomerController');
+
+
+//Salary
+Route::Post('/salary/pay', 'API\SalaryController@Pay');
+Route::Get('/salary', 'API\SalaryController@AllSalary');
+Route::Get('/salary/view/{id}', 'API\SalaryController@ViewSalary');
+Route::Get('/edit/salary/{id}', 'API\SalaryController@EditSalary');
+Route::Post('/salary/update/{id}', 'API\SalaryController@SalaryUpdate');
+
+
+//////////////////////////////////////////////////////////////
+
+
+
+// Vat Route
+Route::Get('/regulations/', 'API\RegulationController@regulations');
+
+
+// Add to cart Route
+Route::Get('/cart/add/{id}', 'API\CartController@AddToCart');
+Route::Get('/cart/products', 'API\CartController@cartProducts');
+Route::Get('/cart/remove/{id}', 'API\CartController@removeCart');
+Route::Get('/cart/product/increment/{id}', 'API\CartController@increment');
+Route::Get('/cart/product/decrement/{id}', 'API\CartController@decrement');
+
+
+// Order Route
+Route::Get('/orders', 'API\OrderController@TodayOrder');
+Route::Get('/order/details/{id}', 'API\OrderController@OrderDetails');
+Route::Get('/order/all-order-details/{id}', 'API\OrderController@OrderDetailsAll');
+Route::Post('/search/order', 'API\PosController@SearchOrderDate');
+
+// Admin Dashboard Route
+Route::Get('/today/sell', 'API\PosController@TodaySell');
+Route::Get('/today/income', 'API\PosController@TodayIncome');
+Route::Get('/today/due', 'API\PosController@TodayDue');
+Route::Get('/today/expense', 'API\PosController@TodayExpense');
+Route::Get('/today/stock-out', 'API\PosController@Stockout');
+Route::Get('/category/products/{id}', 'API\PosController@GetProduct');
+Route::Post('/order-done', 'API\PosController@OrderDone');
+
+

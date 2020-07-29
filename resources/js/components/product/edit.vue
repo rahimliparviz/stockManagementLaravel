@@ -3,7 +3,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/supplier" class="btn btn-primary">All Supplier </router-link>
+  <router-link to="/product" class="btn btn-primary">All Product </router-link>
    
  </div>
 
@@ -17,23 +17,25 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Add Supplier</h1>
+                    <h1 class="h4 text-gray-900 mb-4"> Product Update</h1>
                   </div>
 
-      <form class="user" @submit.prevent="supplierUpdate" enctype="multipart/form-data">
+      <form class="user" @submit.prevent="ProductUpdate" enctype="multipart/form-data">
 
         <div class="form-group">
 
           <div class="form-row">
             <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Full Name" v-model="form.name">
-       <small class="text-danger" v-if="errors.name"> {{ errors.name[0] }} </small>
+              <label for="exampleFormControlSelect1">Product Name</label>
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Product Name" v-model="form.product_name">
+       <small class="text-danger" v-if="errors.product_name"> {{ errors.product_name[0] }} </small>
             </div>
 
 
      <div class="col-md-6">
-         <input type="email" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Email" v-model="form.email">
-         <small class="text-danger" v-if="errors.email"> {{ errors.email[0] }} </small>
+      <label for="exampleFormControlSelect1">Product Code</label>
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Product Code" v-model="form.product_code">
+         <small class="text-danger" v-if="errors.product_code"> {{ errors.product_code[0] }} </small>
             </div>     
             
           </div>
@@ -44,20 +46,65 @@
 
           <div class="form-row">
             <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Address" v-model="form.address">
-         <small class="text-danger" v-if="errors.address"> {{ errors.address[0] }} </small>
+      <label for="exampleFormControlSelect1">Product Category</label>
+  <select class="form-control" id="exampleFormControlSelect1" v-model="form.category_id">
+     <option :value="category.id" v-for="category in categories">{{ category.category_name }}</option>
+                       
+                      </select>   
+   <small class="text-danger" v-if="errors.category_id"> {{ errors.category_id[0] }} </small>
+
+        
             </div>
 
 
      <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Shop Name" v-model="form.shopname">
-         <small class="text-danger" v-if="errors.shopname"> {{ errors.shopname[0] }} </small>
+          <label for="exampleFormControlSelect1">Product Supplier</label>
+ <select class="form-control" id="exampleFormControlSelect1" v-model="form.supplier_id">
+   
+    <option :value="supplier.id" v-for="supplier in suppliers">{{ supplier.name }}</option>
+                        
+                      </select>    
+                                     <small class="text-danger" v-if="errors.supplier_id"> {{ errors.supplier_id[0] }} </small>
+
             </div>     
             
           </div>
         </div>
 
-        
+       
+
+
+ <div class="form-group">
+
+          <div class="form-row">
+            <div class="col-md-4">
+              <label for="exampleFormControlSelect1">Product Root</label>
+         <input type="text" class="form-control" id="exampleInputFirstName"  v-model="form.root">
+       <small class="text-danger" v-if="errors.root"> {{ errors.root[0] }} </small>
+            </div>
+
+
+ <div class="col-md-4">
+              <label for="exampleFormControlSelect1">Buying Price</label>
+         <input type="text" class="form-control" id="exampleInputFirstName"  v-model="form.buying_price">
+       <small class="text-danger" v-if="errors.buying_price"> {{ errors.buying_price[0] }} </small>
+            </div>
+
+
+
+     <div class="col-md-4">
+      <label for="exampleFormControlSelect1">Selling Price</label>
+         <input type="text" class="form-control" id="exampleInputFirstName" v-model="form.selling_price">
+         <small class="text-danger" v-if="errors.selling_price"> {{ errors.selling_price[0] }} </small>
+            </div>     
+            
+          </div>
+        </div>
+
+
+
+
+ 
 
 
 
@@ -65,17 +112,24 @@
 
           <div class="form-row">
             <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your phone Number" v-model="form.phone">
-         <small class="text-danger" v-if="errors.phone"> {{ errors.phone[0] }} </small>
+              <label for="exampleFormControlSelect1">Buying Date</label>
+         <input type="date" class="form-control" id="exampleInputFirstName" v-model="form.buying_date">
+  <small class="text-danger" v-if="errors.buying_date"> {{ errors.buying_date[0] }} </small>
             </div>
 
 
      <div class="col-md-6">
-        
+      <label for="exampleFormControlSelect1">Product Quantity</label>
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Quantity" v-model="form.product_quantity">
+         <small class="text-danger" v-if="errors.product_quantity"> {{ errors.product_quantity[0] }} </small>
             </div>     
             
           </div>
         </div>
+
+
+
+       
 
 
          <div class="form-group">
@@ -84,13 +138,13 @@
             <div class="col-md-6">
    <input type="file" class="custom-file-input" id="customFile" @change="onFileSelected">
 
-  <small class="text-danger" v-if="errors.photo"> {{ errors.photo[0] }} </small>
+  <small class="text-danger" v-if="errors.image"> {{ errors.image[0] }} </small>
        <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
 
 
      <div class="col-md-6">
-        <img :src="form.photo" style="height: 40px; width: 40px;">
+        <img :src="form.image" style="height: 40px; width: 40px;">
             </div>     
             
           </div>
@@ -100,7 +154,7 @@
 
 
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+          <button type="submit" class="btn btn-primary btn-block">Update</button>
         </div>
         
       </form>
@@ -124,7 +178,6 @@
 </template>
 
 
-
 <script type="text/javascript">
     import {mapGetters} from 'vuex'
 import agent from '../../api/agent';
@@ -136,32 +189,38 @@ import agent from '../../api/agent';
       }
     },
     data(){
- return {
+    return {
       form:{
-        name: '',
-        email: '',
-        phone: '',
-        shopname: '',
-        address: '',
-        photo: '',
-        newphoto: ''
+        product_name: '',
+        product_code: '',
+        category_id: '',
+        supplier_id: '',
+        root: '',
+        image: '',
+        newimage: '',
+        buying_price: '',
+        selling_price: '',
+        buying_date: '',
+        product_quantity: '' 
         
       },
-      errors:{}
+      errors:{},
+      categories:{},
+      suppliers:{},
     }
   },
-      computed:{
-      ...mapGetters([
-      'token'
-    ])},
   created(){
-
-    let id = this.$route.params.id
-    agent.Supplier.details(id)
-  	.then((data) => {
-      this.form = data
-    })
+  	let id = this.$route.params.id
+    // axios.get('/api/product/'+id)
+    agent.Product.details(id)
+  	.then((data) => (this.form = data))
   	.catch(console.log('error'))
+// Category Collected 
+ agent.Category.list()
+    .then((data) => (this.categories = data))
+// Supplier Collected 
+    agent.Supplier.list()
+    .then((data) => (this.suppliers = data)) 
   },
   methods:{
     onFileSelected(event){
@@ -171,20 +230,23 @@ import agent from '../../api/agent';
      }else{
       let reader = new FileReader();
       reader.onload = event =>{
-        this.form.newphoto = event.target.result
+        this.form.newimage = event.target.result
        
       };
       reader.readAsDataURL(file);
      }
     },
-  supplierUpdate(){
+  ProductUpdate(){
       let id = this.$route.params.id
-      agent.Supplier.update(this.form)
+      agent.Product.update(this.form)
        .then(() => {
-        this.$router.push({ name: 'suppliers'})
+        this.$router.push({ name: 'product'})
         Notification.success()
        })
-       .catch(error =>this.errors = error.data.errors)
+       .catch(error =>{
+         console.log(error)
+         this.errors = error.data.errors
+       })
      },
   } 
   }

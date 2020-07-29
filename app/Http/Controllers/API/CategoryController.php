@@ -20,7 +20,7 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-   
+
 
     /**
      * Store a newly created resource in storage.
@@ -36,8 +36,8 @@ class CategoryController extends Controller
 
          $category = new Category;
          $category->category_name = $request->category_name;
-         
-         $category->save();  
+
+         $category->save();
     }
 
     /**
@@ -52,7 +52,7 @@ class CategoryController extends Controller
        return response()->json($category);
     }
 
-  
+
 
     /**
      * Update the specified resource in storage.
@@ -63,6 +63,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validateData = $request->validate([
+        'category_name' => 'required|unique:categories|max:255',
+    ]   );
         $data = array();
         $data['category_name'] =  $request->category_name;
        Category::where('id',$id)->update($data);

@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
-  <router-link to="/supplier" class="btn btn-primary">All Supplier </router-link>
-   
+  <router-link to="/category" class="btn btn-primary">All Category </router-link>
+
  </div>
 
 
@@ -17,97 +17,37 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Add Supplier</h1>
+                    <h1 class="h4 text-gray-900 mb-4"> Category Update</h1>
                   </div>
 
-      <form class="user" @submit.prevent="supplierUpdate" enctype="multipart/form-data">
+      <form class="user" @submit.prevent="categoryUpdate">
 
         <div class="form-group">
 
           <div class="form-row">
-            <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Full Name" v-model="form.name">
-       <small class="text-danger" v-if="errors.name"> {{ errors.name[0] }} </small>
+            <div class="col-md-12">
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Category Name" v-model="form.category_name">
+  <small class="text-danger" v-if="errors.category_name"> {{ errors.category_name[0] }} </small>
+
+
             </div>
 
-
-     <div class="col-md-6">
-         <input type="email" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Email" v-model="form.email">
-         <small class="text-danger" v-if="errors.email"> {{ errors.email[0] }} </small>
-            </div>     
-            
-          </div>
-        </div>
-       
-        
-         <div class="form-group">
-
-          <div class="form-row">
-            <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Address" v-model="form.address">
-         <small class="text-danger" v-if="errors.address"> {{ errors.address[0] }} </small>
-            </div>
-
-
-     <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Shop Name" v-model="form.shopname">
-         <small class="text-danger" v-if="errors.shopname"> {{ errors.shopname[0] }} </small>
-            </div>     
-            
           </div>
         </div>
 
-        
+
 
 
 
         <div class="form-group">
-
-          <div class="form-row">
-            <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your phone Number" v-model="form.phone">
-         <small class="text-danger" v-if="errors.phone"> {{ errors.phone[0] }} </small>
-            </div>
-
-
-     <div class="col-md-6">
-        
-            </div>     
-            
-          </div>
+          <button type="submit" class="btn btn-primary btn-block">Update</button>
         </div>
 
-
-         <div class="form-group">
-
-          <div class="form-row">
-            <div class="col-md-6">
-   <input type="file" class="custom-file-input" id="customFile" @change="onFileSelected">
-
-  <small class="text-danger" v-if="errors.photo"> {{ errors.photo[0] }} </small>
-       <label class="custom-file-label" for="customFile">Choose file</label>
-            </div>
-
-
-     <div class="col-md-6">
-        <img :src="form.photo" style="height: 40px; width: 40px;">
-            </div>     
-            
-          </div>
-        </div>
-
- 
-
-
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
-        </div>
-        
       </form>
                   <hr>
                   <div class="text-center">
-  
-  
+
+
                   </div>
                   <div class="text-center">
                   </div>
@@ -124,74 +64,58 @@
 </template>
 
 
-
 <script type="text/javascript">
-    import {mapGetters} from 'vuex'
-import agent from '../../api/agent';
+  import {mapGetters} from 'vuex'
+  import agent from "../../api/agent";
+
 
   export default {
     created(){
-     if (!this.token) {
+        if (!this.token) {
       this.$router.push({ name: "/" });
       }
+
+      let id = this.$route.params.id
+      agent.Category.details(id)
+  	.then((data) => {
+      (this.form = data)
+    })
+  	.catch(console.log('error'))
+
     },
     data(){
- return {
+    return {
       form:{
-        name: '',
-        email: '',
-        phone: '',
-        shopname: '',
-        address: '',
-        photo: '',
-        newphoto: ''
-        
+      category_name: null
       },
       errors:{}
     }
   },
-      computed:{
-      ...mapGetters([
+      computed: {
+    ...mapGetters([
       'token'
-    ])},
-  created(){
-
-    let id = this.$route.params.id
-    agent.Supplier.details(id)
-  	.then((data) => {
-      this.form = data
-    })
-  	.catch(console.log('error'))
-  },
+    ]) },
   methods:{
-    onFileSelected(event){
-     let file = event.target.files[0];
-     if (file.size > 1048770) {
-      Notification.image_validation()
-     }else{
-      let reader = new FileReader();
-      reader.onload = event =>{
-        this.form.newphoto = event.target.result
-       
-      };
-      reader.readAsDataURL(file);
-     }
-    },
-  supplierUpdate(){
+
+ categoryUpdate(){
       let id = this.$route.params.id
-      agent.Supplier.update(this.form)
+      agent.Category.update(this.form)
+      //  axios.patch('/api/category/'+id,this.form)
        .then(() => {
-        this.$router.push({ name: 'suppliers'})
+        this.$router.push({ name: 'category'})
         Notification.success()
        })
-       .catch(error =>this.errors = error.data.errors)
+       .catch(error =>{
+           console.log(error)
+           this.errors = error.data.errors
+       })
      },
-  } 
   }
-   
+  }
+
 </script>
 
 
 <style type="text/css">
-  
+
 </style>

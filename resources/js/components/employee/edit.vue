@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/employees" class="btn btn-primary">All Employee </router-link>
-   
+
  </div>
 
 
@@ -34,12 +34,12 @@
      <div class="col-md-6">
          <input type="email" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Email" v-model="form.email">
          <small class="text-danger" v-if="errors.email"> {{ errors.email[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
-       
-        
+
+
          <div class="form-group">
 
           <div class="form-row">
@@ -50,14 +50,14 @@
 
 
      <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Sallery" v-model="form.sallery">
-         <small class="text-danger" v-if="errors.sallery"> {{ errors.sallery[0] }} </small>
-            </div>     
-            
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Salary" v-model="form.salary">
+         <small class="text-danger" v-if="errors.salary"> {{ errors.salary[0] }} </small>
+            </div>
+
           </div>
         </div>
 
-       
+
 
 
 
@@ -73,8 +73,8 @@
      <div class="col-md-6">
          <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Nid" v-model="form.nid">
          <small class="text-danger" v-if="errors.nid"> {{ errors.nid[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
@@ -90,9 +90,9 @@
 
 
      <div class="col-md-6">
-        
-            </div>     
-            
+
+            </div>
+
           </div>
         </div>
 
@@ -109,23 +109,23 @@
      <div class="col-md-6" v-if='form.photo'>
 
         <img :src="baseUrl+'/'+form.photo" style="height: 40px; width: 40px;">
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
- 
+
 
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary btn-block">Update</button>
         </div>
-        
+
       </form>
                   <hr>
                   <div class="text-center">
-  
-  
+
+
                   </div>
                   <div class="text-center">
                   </div>
@@ -160,7 +160,7 @@ import agent from '../../api/agent';
         name: '',
         email: '',
         phone: '',
-        sallery: '',
+        salary: '',
         address: '',
         photo: '',
         newphoto: '',
@@ -175,7 +175,7 @@ import agent from '../../api/agent';
       'token'
     ])},
   created(){
-  
+
 
 
     let id = this.$route.params.id
@@ -195,7 +195,7 @@ import agent from '../../api/agent';
       let reader = new FileReader();
       reader.onload = event =>{
         this.form.newphoto = event.target.result
-       
+
       };
       reader.readAsDataURL(file);
      }
@@ -210,12 +210,12 @@ import agent from '../../api/agent';
        })
        .catch(error =>this.errors = error.data.errors)
      },
-  } 
   }
-   
+  }
+
 </script>
 
 
 <style type="text/css">
-  
+
 </style>

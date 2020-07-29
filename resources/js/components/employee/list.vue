@@ -1,11 +1,11 @@
 
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/add-employee" class="btn btn-primary">Add Employee </router-link>
-   
+
  </div>
 <br>
    <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
@@ -27,7 +27,7 @@
                         <th>Name</th>
                         <th>Photo</th>
                         <th>Phone</th>
-                        <th>Sallery</th>
+                        <th>Salary</th>
                         <th>Joining Date</th>
                         <th>Action</th>
                       </tr>
@@ -40,7 +40,7 @@
                           <!-- <span v-else>No img</span> -->
                           </td>
                         <td>{{ employee.phone }}</td>
-                        <td>{{ employee.sallery }}</td>
+                        <td>{{ employee.salary }}</td>
                         <td>{{ employee.joining_date }}</td>
             <td>
    <router-link :to="{name: 'edit-employee', params:{id:employee.id}}" class="btn btn-sm btn-primary">Edit</router-link>
@@ -48,7 +48,7 @@
  <a @click="deleteEmployee(employee.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
             </td>
                       </tr>
-                    
+
                     </tbody>
                   </table>
                 </div>
@@ -59,7 +59,7 @@
           <!--Row-->
 
 
-   
+
   </div>
 
 
@@ -90,10 +90,10 @@
       filtersearch(){
         return this.employees.filter(employee => {
           return employee.name.match(this.searchTerm)
-        }) 
+        })
       }
     },
- 
+
   methods:{
     allEmployee(){
       agent.Employee.list()
@@ -130,13 +130,13 @@
                 )
               }
             })
-  } 
+  }
   },
   created(){
     this.allEmployee();
-  } 
-  
-  } 
+  }
+
+  }
 </script>
 
 

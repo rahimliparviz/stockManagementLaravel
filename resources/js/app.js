@@ -15,8 +15,11 @@ import router from './router/roter';
 import Notification from './helpers/Notification'
 window.Notification = Notification;
 
+//TODO - Reloadi sil ve istifade olunan yerleri refaktor et
+window.Reload = new Vue();
 
- // Sweet Alert start 
+
+ // Sweet Alert start
  import Swal from 'sweetalert2'
  window.Swal = Swal;
  const Toast = Swal.mixin({
@@ -30,11 +33,11 @@ window.Notification = Notification;
      toast.addEventListener('mouseleave', Swal.resumeTimer)
    }
  });
- 
+
  window.Toast = Toast;
  window.baseUrl = window.location.origin;
-  
- // Sweet Alert End 
+
+ // Sweet Alert End
 
 
 

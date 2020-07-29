@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/supplier" class="btn btn-primary">All Supplier </router-link>
-   
+
  </div>
 
 
@@ -20,7 +20,7 @@
                     <h1 class="h4 text-gray-900 mb-4"> Supplier Update</h1>
                   </div>
 
-      <form class="user" @submit.prevent="supplierUpdate" enctype="multipart/form-data">
+      <form class="user" @submit.prevent="supplierInsert" enctype="multipart/form-data">
 
         <div class="form-group">
 
@@ -34,12 +34,12 @@
      <div class="col-md-6">
          <input type="email" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Email" v-model="form.email">
          <small class="text-danger" v-if="errors.email"> {{ errors.email[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
-       
-        
+
+
          <div class="form-group">
 
           <div class="form-row">
@@ -50,15 +50,15 @@
 
 
      <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Sallery" v-model="form.shopname">
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your salary" v-model="form.shopname">
          <small class="text-danger" v-if="errors.shopname"> {{ errors.shopname[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
-       
- 
+
+
 
 
         <div class="form-group">
@@ -71,9 +71,9 @@
 
 
      <div class="col-md-6">
-        
-            </div>     
-            
+
+            </div>
+
           </div>
         </div>
 
@@ -91,23 +91,23 @@
 
      <div class="col-md-6">
         <img :src="form.photo" style="height: 40px; width: 40px;">
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
- 
+
 
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary btn-block">Update</button>
         </div>
-        
+
       </form>
                   <hr>
                   <div class="text-center">
-  
-  
+
+
                   </div>
                   <div class="text-center">
                   </div>
@@ -177,12 +177,12 @@
            this.errors = error.data.errors
        })
      },
-  } 
   }
-   
+  }
+
 </script>
 
 
 <style type="text/css">
-  
+
 </style>
