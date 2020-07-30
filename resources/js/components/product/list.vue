@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/add-product" class="btn btn-primary">Add Product </router-link>
-   
+
  </div>
 <br>
    <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
@@ -48,7 +48,7 @@
  <a @click="deleteProduct(product.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
             </td>
                       </tr>
-                    
+
                     </tbody>
                   </table>
                 </div>
@@ -59,7 +59,7 @@
           <!--Row-->
 
 
-   
+
   </div>
 
 
@@ -73,10 +73,17 @@
 
   export default {
     created(){
+        this.allProduct();
+
+        console.log(this.token)
        if (!this.token) {
       this.$router.push({ name: "/" });
       }
     },
+      computed: {
+          ...mapGetters([
+              'token'
+          ]) },
     data(){
       return{
         products:[],
@@ -87,10 +94,10 @@
       filtersearch(){
       return this.products.filter(product => {
          return product.product_name.match(this.searchTerm)
-      }) 
+      })
       }
     },
- 
+
   methods:{
     allProduct(){
       agent.Product.list()
@@ -124,13 +131,10 @@
                 )
               }
             })
-  } 
-  },
-  created(){
-    this.allProduct();
-  } 
-  
-  } 
+  }
+  }
+
+  }
 </script>
 
 

@@ -1,10 +1,3 @@
-// import { IProfile, IPhoto } from './../models/profile';
-// import { history } from './../../index';
-// import { IActivity, IActivitiesEnvelope } from './../models/activity';
-// import axios, { AxiosResponse } from 'axios';
-// import {toast} from 'react-toastify'
-// import { IUser, IUserFormValues } from '../models/user';
-
 import axios from "axios";
 import router from '../router/roter'
 
@@ -12,13 +5,13 @@ import router from '../router/roter'
 axios.defaults.baseURL ='/api';
 
 
-// axios.interceptors.request.use((config) => {
-//     const token = window.localStorage.getItem('jwt');
-//     if (token) config.headers.Authorization = `Bearer ${token}`;
-//     return config;
-// }, error => {
-//     return Promise.reject(error);
-// })
+axios.interceptors.request.use((config) => {
+    const token = window.localStorage.getItem('token');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+}, error => {
+    return Promise.reject(error);
+})
 
 
 axios.interceptors.response.use(undefined, error => {
@@ -68,64 +61,52 @@ const requests = {
     del: (url)=> axios.delete(url).then(responseBody),
 }
 
-// const Activities = {
-//     list: (params: URLSearchParams): Promise<IActivitiesEnvelope> =>
-//       axios.get('/activities', {params: params}).then(responseBody),
-//     details: (id: string) => requests.get(`/activities/${id}`),
-//     create: (activity: IActivity) => requests.post('/activities', activity),
-//     update: (activity: IActivity) =>
-//       requests.put(`/activities/${activity.id}`, activity),
-//     delete: (id: string) => requests.del(`/activities/${id}`),
-//     attend: (id: string) => requests.post(`/activities/${id}/attend`, {}),
-//     unattend: (id: string) => requests.del(`/activities/${id}/attend`)
-//   };
-
 const Employee = {
-    list: () => requests.get(`/employee`),
-    details: (id) => requests.get(`/employee/${id}`),
-    create: (employee) => requests.post('/employee', employee),
-    update: (employee) =>requests.put(`/employee/${employee.id}`, employee),
-    delete: (id) => requests.del(`/employee/${id}`),
+    list: () => requests.get(`/employees`),
+    details: (id) => requests.get(`/employees/${id}`),
+    create: (employee) => requests.post('/employees', employee),
+    update: (employee) =>requests.put(`/employees/${employee.id}`, employee),
+    delete: (id) => requests.del(`/employees/${id}`),
   };
 
   const Supplier = {
-    list: () => requests.get(`/supplier`),
-    details: (id) => requests.get(`/supplier/${id}`),
-    create: (supplier) => requests.post('/supplier', supplier),
-    update: (supplier) =>requests.put(`/supplier/${supplier.id}`, supplier),
-    delete: (id) => requests.del(`/supplier/${id}`),
+    list: () => requests.get(`/suppliers`),
+    details: (id) => requests.get(`/suppliers/${id}`),
+    create: (supplier) => requests.post('/suppliers', supplier),
+    update: (supplier) =>requests.put(`/suppliers/${supplier.id}`, supplier),
+    delete: (id) => requests.del(`/suppliers/${id}`),
   };
 
   const Category = {
-    list: () => requests.get(`/category`),
-    details: (id) => requests.get(`/category/${id}`),
-    create: (category) => requests.post('/category', category),
-    update: (category) =>requests.put(`/category/${category.id}`, category),
-    delete: (id) => requests.del(`/category/${id}`),
+    list: () => requests.get(`/categories`),
+    details: (id) => requests.get(`/categories/${id}`),
+    create: (category) => requests.post('/categories', category),
+    update: (category) =>requests.put(`/categories/${category.id}`, category),
+    delete: (id) => requests.del(`/categories/${id}`),
   };
 
   const Product = {
-    list: () => requests.get(`/product`),
-    details: (id) => requests.get(`/product/${id}`),
-    create: (product) => requests.post('/product', product),
-    update: (product) =>requests.put(`/product/${product.id}`, product),
-    delete: (id) => requests.del(`/product/${id}`),
+    list: () => requests.get(`/products`),
+    details: (id) => requests.get(`/products/${id}`),
+    create: (product) => requests.post('/products', product),
+    update: (product) =>requests.put(`/products/${product.id}`, product),
+    delete: (id) => requests.del(`/products/${id}`),
   };
 
   const Expense = {
-    list: () => requests.get(`/expense`),
-    details: (id) => requests.get(`/expense/${id}`),
-    create: (expense) => requests.post('/expense', expense),
-    update: (expense) =>requests.put(`/expense/${expense.id}`, expense),
-    delete: (id) => requests.del(`/expense/${id}`),
+    list: () => requests.get(`/expenses`),
+    details: (id) => requests.get(`/expenses/${id}`),
+    create: (expense) => requests.post('/expenses', expense),
+    update: (expense) =>requests.put(`/expenses/${expense.id}`, expense),
+    delete: (id) => requests.del(`/expenses/${id}`),
   };
 
   const Customer = {
-    list: () => requests.get(`/customer`),
-    details: (id) => requests.get(`/customer/${id}`),
-    create: (customer) => requests.post('/customer', customer),
-    update: (customer) =>requests.put(`/customer/${customer.id}`, customer),
-    delete: (id) => requests.del(`/customer/${id}`),
+    list: () => requests.get(`/customers`),
+    details: (id) => requests.get(`/customers/${id}`),
+    create: (customer) => requests.post('/customers', customer),
+    update: (customer) =>requests.put(`/customers/${customer.id}`, customer),
+    delete: (id) => requests.del(`/customers/${id}`),
   };
 
   const Salary = {
@@ -147,18 +128,18 @@ const Employee = {
         expense: () => requests.get(`/today/expense`),
         stockOut: () => requests.get(`/today/stock-out`),
         categoryProduct: (id) => requests.get(`category/products/${id}`),
-        orderDone: () => requests.post(`/order-done/`),
+        submitOrder: (order) => requests.post(`/order/`,order),
     };
 
     const Regulations = {
-        list: () => requests.get(`/regulations`),
+        get: () => requests.get(`/regulations`),
     }
 
 const Order = {
     list: () => requests.get(`/orders`),
-    details: (id) => requests.get(`/order/details/${id}`),
-    allDetails: (id) => requests.get(`/order/all-order-details/${id}`),
-    search:()=>requests.post('/search/order')
+    order: (id) => requests.get(`/order/${id}`),
+    OrderPruducts: (id) => requests.get(`/order/order-details/${id}`),
+    search:(data)=>requests.post('/search/order',data)
 };
 
 const Cart = {

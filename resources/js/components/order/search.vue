@@ -68,8 +68,8 @@
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Product Name</th>
-                        <th>Qty</th>
+                        <th>Customer Name</th>
+                        <th>quantity</th>
                         <th>SubTotal</th>
                         <th>Vat</th>
                         <th>Total </th>
@@ -80,7 +80,7 @@
                     <tbody>
                       <tr v-for="order in orders">
                         <td>{{ order.name }}</td>
-                        <td>{{ order.qty }}</td>
+                        <td>{{ order.quantity }}</td>
                         <td>{{ order.sub_total }}</td>
                         <td>{{ order.vat }}</td>
                        <td>{{ order.total }} $</td>
@@ -141,10 +141,13 @@
   methods:{
 
   searchDate(){
-      var data = {date:this.date}
-       axios.post('/api/search/order/',data)
-        .then(({data}) => (this.orders = data))
-        .catch(error =>this.errors = error.response.data.errors)
+      // var data = {date:this.date}
+
+      agent.Order.search({date:this.date})
+
+       // axios.post('/api/search/order/',data)
+        .then((data) => (this.orders = data))
+        .catch(error =>this.errors = error.data.errors)
      },
   }
 

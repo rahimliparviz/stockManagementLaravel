@@ -10,24 +10,24 @@ use DB;
 
 class CartController extends Controller
 {
-    //TODO : burda pro_id ni relation kimi ver
+    //TODO : burda product_id ni relation kimi ver
     public function AddToCart(Request $request, $id){
         $product = Product::where('id',$id)->first();
 
-        $check = Pos::where('pro_id',$id)->first();
+        $check = Pos::where('product_id',$id)->first();
 
         if ($check) {
-            Pos::where('pro_id',$id)->increment('pro_quantity');
+            Pos::where('product_id',$id)->increment('product_quantity');
 
-            $product = Pos::where('pro_id',$id)->first();
-            $subtotal = $product->pro_quantity * $product->product_price;
-            Pos::where('pro_id',$id)->update(['sub_total'=> $subtotal]);
+            $product = Pos::where('product_id',$id)->first();
+            $subtotal = $product->product_quantity * $product->product_price;
+            Pos::where('product_id',$id)->update(['sub_total'=> $subtotal]);
 
         }else{
             $data = array();
-            $data['pro_id'] = $id;
-            $data['pro_name'] = $product->product_name;
-            $data['pro_quantity'] = 1;
+            $data['product_id'] = $id;
+            $data['product_name'] = $product->product_name;
+            $data['product_quantity'] = 1;
             $data['product_price'] = $product->selling_price;
             $data['sub_total'] = $product->selling_price;
 
@@ -56,8 +56,8 @@ class CartController extends Controller
     public function increment($id){
 
         $product = Pos::find($id);
-        $product->increment('pro_quantity');
-        $product->sub_total= $product->pro_quantity * $product->product_price;
+        $product->increment('product_quantity');
+        $product->sub_total= $product->product_quantity * $product->product_price;
         $product->update();
         return response('Done');
     }
@@ -65,8 +65,8 @@ class CartController extends Controller
 
     public function decrement($id){
         $product = Pos::find($id);
-        $product->decrement('pro_quantity');
-        $product->sub_total= $product->pro_quantity * $product->product_price;
+        $product->decrement('product_quantity');
+        $product->sub_total= $product->product_quantity * $product->product_price;
         $product->update();
         return response('Done');
     }

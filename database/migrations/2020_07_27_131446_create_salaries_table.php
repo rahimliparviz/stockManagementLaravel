@@ -20,6 +20,11 @@ class CreateSalariesTable extends Migration
             $table->string('salary_date')->nullable();
             $table->string('salary_month')->nullable();
             $table->string('salary_year')->nullable();
+
+            $table->foreign('employee_id')
+                ->references('id')
+                ->on('employees')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

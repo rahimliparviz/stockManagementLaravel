@@ -21,7 +21,7 @@ class SupplierController extends Controller
         return response()->json($supplier);
     }
 
-     
+
     /**
      * Store a newly created resource in storage.
      *
@@ -52,21 +52,21 @@ class SupplierController extends Controller
          $supplier->name = $request->name;
          $supplier->email = $request->email;
          $supplier->phone = $request->phone;
-         $supplier->shopname = $request->shopname;
+         $supplier->shop_name = $request->shop_name;
          $supplier->address = $request->address;
          $supplier->photo = $image_url;
-         $supplier->save(); 
+         $supplier->save();
      }else{
          $supplier = new Supplier;
          $supplier->name = $request->name;
          $supplier->email = $request->email;
          $supplier->phone = $request->phone;
-         $supplier->shopname = $request->shopname;
+         $supplier->shop_name = $request->shop_name;
          $supplier->address = $request->address;
-        
-         $supplier->save(); 
 
-     } 
+         $supplier->save();
+
+     }
 
     }
 
@@ -82,7 +82,7 @@ class SupplierController extends Controller
        return response()->json($supplier);
     }
 
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -97,9 +97,9 @@ class SupplierController extends Controller
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['phone'] = $request->phone;
-        $data['shopname'] = $request->shopname;
+        $data['shop_name'] = $request->shop_name;
         $data['address'] = $request->address;
-       
+
         $image = $request->newphoto;
 
         if ($image) {
@@ -112,7 +112,7 @@ class SupplierController extends Controller
          $upload_path = 'backend/supplier/';
          $image_url = $upload_path.$name;
          $success = $img->save($image_url);
-         
+
          if ($success) {
             $data['photo'] = $image_url;
             $img = Supplier::where('id',$id)->first();
@@ -120,7 +120,7 @@ class SupplierController extends Controller
             $done = unlink($image_path);
             $user  = Supplier::where('id',$id)->update($data);
          }
-          
+
         }else{
             $oldphoto = $request->photo;
             $data['photo'] = $oldphoto;

@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
-  <router-link to="/store-category" class="btn btn-primary">Add Category </router-link>
-   
+  <router-link to="/add-category" class="btn btn-primary">Add Category </router-link>
+
  </div>
 <br>
    <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
@@ -30,14 +30,14 @@
                     <tbody>
                       <tr v-for="category in filtersearch" :key="category.id">
                         <td> {{ category.category_name }} </td>
-                       
+
             <td>
    <router-link :to="{name: 'edit-category', params:{id:category.id}}" class="btn btn-sm btn-primary">Edit</router-link>
 
  <a @click="deleteCategory(category.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
             </td>
                       </tr>
-                    
+
                     </tbody>
                   </table>
                 </div>
@@ -48,7 +48,7 @@
           <!--Row-->
 
 
-   
+
   </div>
 
 
@@ -80,15 +80,15 @@
         return this.categories.filter(category  => {
           console.log(category)
           return category.category_name.match(this.searchTerm)
-        }) 
+        })
       }
     },
- 
+
   methods:{
     allCategories(){
       agent.Category.list()
       .then((data) => {
-        
+
         this.categories = data
       })
       .catch()
@@ -121,13 +121,13 @@
                 )
               }
             })
-  } 
+  }
   },
   created(){
     this.allCategories();
-  } 
-  
-  } 
+  }
+
+  }
 </script>
 
 

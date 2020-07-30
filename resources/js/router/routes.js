@@ -38,7 +38,7 @@ import editSalary from '../components/salary/edit.vue'
 import stock from '../components/stock/list'
 import editStock from '../components/stock/edit'
 
-import pos from '../components/pos/pointofsale'
+import pos from '../components/pos/pos'
 
 import order from '../components/order/order'
 import viewOrder from '../components/order/view'
@@ -102,4 +102,48 @@ export const routes = [
  { path: '/order', component: order, name:'order'},
  { path: '/view-order/:id', component: viewOrder, name:'view-order'},
  { path: '/searchorder', component: searchOrder, name:'search-order'},
+
+
+
+//    TODO : refactor as belows for authentication
+// import store from '../store' // your vuex store
+//
+// const ifNotAuthenticated = (to, from, next) => {
+//     if (!store.getters.isAuthenticated) {
+//         next()
+//         return
+//     }
+//     next('/')
+// }
+//
+// const ifAuthenticated = (to, from, next) => {
+//     if (store.getters.isAuthenticated) {
+//         next()
+//         return
+//     }
+//     next('/login')
+// }
+//
+// export default new Router({
+//     mode: 'history',
+//     routes: [
+//         {
+//             path: '/',
+//             name: 'Home',
+//             component: Home,
+//         },
+//         {
+//             path: '/account',
+//             name: 'Account',
+//             component: Account,
+//             beforeEnter: ifAuthenticated,
+//         },
+//         {
+//             path: '/login',
+//             name: 'Login',
+//             component: Login,
+//             beforeEnter: ifNotAuthenticated,
+//         },
+//     ],
+// })
 ]

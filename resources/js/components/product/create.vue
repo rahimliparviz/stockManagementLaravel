@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/product" class="btn btn-primary">All Product </router-link>
-   
+
  </div>
 
 
@@ -36,12 +36,12 @@
       <label for="exampleFormControlSelect1">Product Code</label>
          <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Product Code" v-model="form.product_code">
          <small class="text-danger" v-if="errors.product_code"> {{ errors.product_code[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
-       
-        
+
+
          <div class="form-group">
 
           <div class="form-row">
@@ -49,8 +49,8 @@
       <label for="exampleFormControlSelect1">Product Category</label>
   <select class="form-control" id="exampleFormControlSelect1" v-model="form.category_id">
      <option :value="category.id" v-for="category in categories">{{ category.category_name }}</option>
-                       
-                      </select>   
+
+                      </select>
                <small class="text-danger" v-if="errors.category_id"> {{ errors.category_id[0] }} </small>
 
             </div>
@@ -59,19 +59,19 @@
      <div class="col-md-6">
           <label for="exampleFormControlSelect1">Product Supplier</label>
  <select class="form-control" id="exampleFormControlSelect1" v-model="form.supplier_id">
-   
+
     <option :value="supplier.id" v-for="supplier in suppliers">{{ supplier.name }}</option>
-                        
-                      </select>    
+
+                      </select>
                <small class="text-danger" v-if="errors.supplier_id"> {{ errors.supplier_id[0] }} </small>
 
-                      
-            </div>     
-            
+
+            </div>
+
           </div>
         </div>
 
-       
+
 
 
  <div class="form-group">
@@ -96,15 +96,15 @@
       <label for="exampleFormControlSelect1">Selling Price</label>
          <input type="text" class="form-control" id="exampleInputFirstName" v-model="form.selling_price">
          <small class="text-danger" v-if="errors.selling_price"> {{ errors.selling_price[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
 
 
 
- 
+
 
 
 
@@ -122,14 +122,14 @@
       <label for="exampleFormControlSelect1">Product Quantity</label>
          <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Quantity" v-model="form.product_quantity">
          <small class="text-danger" v-if="errors.product_quantity"> {{ errors.product_quantity[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
 
 
-       
+
 
 
          <div class="form-group">
@@ -145,23 +145,23 @@
 
      <div class="col-md-6">
         <img :src="form.image" style="height: 40px; width: 40px;">
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
- 
+
 
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </div>
-        
+
       </form>
                   <hr>
                   <div class="text-center">
-  
-  
+
+
                   </div>
                   <div class="text-center">
                   </div>
@@ -206,7 +206,7 @@
       errors:{},
       categories:{},
       suppliers:{},
-    
+
     }
   },
       computed: {
@@ -215,14 +215,15 @@
     ]) },
   methods:{
     onFileSelected(event){
-
+        console.log('dsadwqd')
      let file = event.target.files[0];
      if (file.size > 1048770) {
       Notification.image_validation()
      }else{
       let reader = new FileReader();
       reader.onload = event =>{
-        this.form.photo = event.target.result
+        this.form.image = event.target.result
+          console.log(this.form);
       };
       reader.readAsDataURL(file);
      }
@@ -242,12 +243,12 @@ ProductInsert(){
     .then((data) => (this.categories = data))
     agent.Supplier.list()
     .then((data) => (this.suppliers = data))
-  } 
   }
-   
+  }
+
 </script>
 
 
 <style type="text/css">
-  
+
 </style>

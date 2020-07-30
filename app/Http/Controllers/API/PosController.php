@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
+use App\Models\Expense;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use DB;
@@ -18,43 +20,56 @@ class PosController extends Controller
 
     }
 
-    public function OrderDone(Request $request){
+    public function order(Request $request){
 
+//        dd($request->all());
         $validatedData = $request->validate([
-            'customer_id' => 'required',
-            'payby' => 'required',
+            'customerId' => 'required',
+            'payBy' => 'required',
         ]);
 
-        $data = array();
-        $data['customer_id'] = $request->customer_id;
-        $data['qty'] = $request->qty;
-        $data['sub_total'] = $request->subtotal;
-        $data['vat'] = $request->vat;
-        $data['total'] = $request->total;
-        $data['pay'] = $request->pay;
-        $data['due'] = $request->due;
-        $data['payby'] = $request->payby;
-        $data['order_date'] = date('d/m/Y');
-        $data['order_month'] = date('F');
-        $data['order_year'] = date('Y');
-        $order_id = DB::table('orders')->insertGetId($data);
 
-        $contents = DB::table('pos')->get();
+        $order = Order::create([
+            'customer_id' => $request->customerId,
+            'quantity' => $request->productsQuantity,
+            'sub_total' => $request->subtotal,
+            'vat' => $request->vat,
+            'total' => $request->total,
+            'pay' => $request->pay,
+            'due' => $request->due,
+            'payby' => $request->payBy,
+            'order_date' => date('d/m/Y'),
+            'order_month' => date('F'),
+            'order_year' => date('Y')
+            ]);
+//        $data['customer_id'] = $request->customerId;
+//        $data['quantity'] = $request->productsQuantity;
+//        $data['sub_total'] = $request->subtotal;
+//        $data['vat'] = $request->vat;
+//        $data['total'] = $request->total;
+//        $data['pay'] = $request->pay;
+//        $data['due'] = $request->due;
+//        $data['payby'] = $request->payBy;
+//        $data['order_date'] = date('d/m/Y');
+//        $data['order_month'] = date('F');
+//        $data['order_year'] = date('Y');
+//        $order_id = DB::table('orders')->insertGetId($data);
 
-        $odata = array();
-        foreach ($contents as $content) {
-            $odata['order_id'] = $order_id;
-            $odata['product_id'] = $content->pro_id;
-            $odata['pro_quantity'] = $content->pro_quantity;
-            $odata['product_price'] = $content->product_price;
-            $odata['sub_total'] = $content->sub_total;
-            DB::table('order_details')->insert($odata);
+        $orderProducts = DB::table('pos')->get();
+
+        foreach ($orderProducts as $orderProduct) {
+            $newOrderProduct = new OrderProduct();
+            $newOrderProduct->order_id = $order->id;
+            $newOrderProduct->product_id = $orderProduct->product_id;
+            $newOrderProduct->product_quantity = $orderProduct->product_quantity;
+            $newOrderProduct->product_price = $orderProduct->product_price;
+            $newOrderProduct->sub_total = $orderProduct->sub_total;
+            $newOrderProduct->save();
 
 
-            DB::table('products')
-                ->where('id',$content->pro_id)
-                ->update(['product_quantity' => DB::raw('product_quantity -' .$content->pro_quantity)]);
-
+            $product = Product::find($orderProduct->product_id);
+            $product->product_quantity-=1;
+            $product->save();
         }
         DB::table('pos')->delete();
         return response('Done');
@@ -62,7 +77,7 @@ class PosController extends Controller
     }
 
 
-    public function SearchOrderDate(Request $request){
+    public function ordersByDate(Request $request){
         $orderdate = $request->date;
         $newdate = new DateTime($orderdate);
         $done = $newdate->format('d/m/Y');
@@ -81,32 +96,32 @@ class PosController extends Controller
 
     public function TodaySell(){
         $date = date('d/m/Y');
-        $sell = DB::table('orders')->where('order_date',$date)->sum('total');
+        $sell = Order::where('order_date',$date)->get()->sum('total');
         return response()->json($sell);
     }
 
     public function TodayIncome(){
         $date = date('d/m/Y');
-        $income = DB::table('orders')->where('order_date',$date)->sum('pay');
+        $income =Order::where('order_date',$date)->get()->sum('pay');
         return response()->json($income);
     }
 
     public function TodayDue(){
         $date = date('d/m/Y');
-        $todaydue = DB::table('orders')->where('order_date',$date)->sum('due');
+        $todaydue =Order::where('order_date',$date)->get()->sum('due');
         return response()->json($todaydue);
     }
 
 
     public function TodayExpense(){
         $date = date('d/m/Y');
-        $expense = DB::table('expenses')->where('expense_date',$date)->sum('amount');
+        $expense = Expense::where('expense_date',$date)->get()->sum('amount');
         return response()->json($expense);
     }
 
     public function Stockout(){
 
-        $product = DB::table('products')->where('product_quantity','<','1')->get();
+        $product = Product::where('product_quantity','<','1')->get();
         return response()->json($product);
 
     }

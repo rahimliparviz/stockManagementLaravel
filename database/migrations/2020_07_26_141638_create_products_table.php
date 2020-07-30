@@ -25,6 +25,16 @@ class CreateProductsTable extends Migration
             $table->string('buying_date')->nullable();
             $table->string('image')->nullable();
             $table->string('product_quantity');
+
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
+
+            $table->foreign('supplier_id')
+                ->references('id')
+                ->on('suppliers')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

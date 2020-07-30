@@ -41,10 +41,10 @@
                     <tbody>
 
           <tr v-for="cart in carts" :key="cart.id">
-            <td>{{ cart.pro_name }}</td>
-            <td><input type="text" readonly="" style="width: 15px;" :value="cart.pro_quantity">
-       <button @click.prevent="increment(cart.id);cart.pro_quantity++" class="btn btn-sm btn-success">+</button>
-   <button  @click.prevent="decrement(cart.id)" class="btn btn-sm btn-danger" v-if="cart.pro_quantity >= 2">-</button>
+            <td>{{ cart.product_name }}</td>
+            <td><input type="text" readonly="" style="width: 15px;" :value="cart.product_quantity">
+       <button @click.prevent="increment(cart.id);cart.product_quantity++" class="btn btn-sm btn-success">+</button>
+   <button  @click.prevent="decrement(cart.id)" class="btn btn-sm btn-danger" v-if="cart.product_quantity >= 2">-</button>
    <button class="btn btn-sm btn-danger" v-else="" disabled="">-</button>
 
             </td>
@@ -60,25 +60,25 @@
                 <div class="card-footer">
             <ul class="list-group">
   <li class="list-group-item d-flex justify-content-between align-items-center">Total Quantity:
-  <strong>{{ qty }}</strong>
+  <strong>{{ productsQuantity }}</strong>
    </li>
      <li class="list-group-item d-flex justify-content-between align-items-center">Sub Total:
-  <strong>{{ subtotal }} $</strong>
+  <strong>{{ subTotal }} $</strong>
    </li>
 
      <li class="list-group-item d-flex justify-content-between align-items-center">Vat:
-  <strong>{{ vats.vat }} %</strong>
+  <strong>{{ vat }} %</strong>
    </li>
      <li class="list-group-item d-flex justify-content-between align-items-center">Total :
-  <strong>{{ subtotal*vats.vat /100 + subtotal}} $</strong>
+  <strong>{{ subTotal*vat /100 + subTotal}} $</strong>
    </li>
 
             </ul>
             <br>
 
-        <form @submit.prevent="orderdone">
+        <form @submit.prevent="submitOrder">
           <label>Customer Name</label>
-          <select class="form-control" v-model="customer_id">
+          <select class="form-control" v-model="customerId">
          <option :value="customer.id" v-for="customer in customers">{{customer.name }} </option>
 
            </select>
@@ -90,7 +90,7 @@
            <input type="text" class="form-control" required="" v-model="due">
 
           <label>Pay By</label>
-          <select class="form-control" v-model="payby">
+          <select class="form-control" v-model="payBy">
                  <option value="HandCash">Hand Cash </option>
                  <option value="Cheaque">Cheaque </option>
                  <option value="GiftCard">Gift Card </option>
@@ -145,7 +145,7 @@
  <input type="text" v-model="searchTerm" class="form-control" style="width: 560px;" placeholder="Search Product">
 
      <div class="row">
-      <div class="col-lg-3 col-md-3 col-sm-6 col-6" v-for="product in filtersearch" :key="product.id">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-6" v-for="product in productSearch" :key="product.id">
              <button class="btn btn-sm" @click.prevent="addToCart(product.id)">
              <div class="card" style="width: 8.5rem; margin-bottom: 5px;">
               <img :src="product.image" id="em_photo" class="card-img-top">
@@ -175,7 +175,7 @@
 <input type="text" v-model="categoryProductSearchTerm" class="form-control" style="width: 560px;" placeholder="Search Product">
 
      <div class="row">
-      <div class="col-lg-3 col-md-3 col-sm-6 col-6" v-for="categoryProduct in getfiltersearch" :key="categoryProduct.id">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-6" v-for="categoryProduct in categoryProductSearch" :key="categoryProduct.id">
             <button class="btn btn-sm" @click.prevent="addToCart(categoryProduct.id)">
              <div class="card" style="width: 8.5rem; margin-bottom: 5px;">
               <img :src="categoryProduct.image" id="em_photo" class="card-img-top">
@@ -226,6 +226,7 @@
 <script type="text/javascript">
     import {mapGetters} from 'vuex'
     import agent from "../../api/agent";
+    import order from "../order/order";
 
 
     export default {
@@ -242,7 +243,7 @@
     this.allCategory();
     this.allCustomer();
     this.cartProduct();
-    this.vat();
+    this.getVat();
     Reload.$on('AfterAdd',() =>{
       this.cartProduct();
     })
@@ -250,11 +251,10 @@
    },
  data(){
       return{
-       customer_id:'',
-       pay:'',
-       due:'',
-       payby:'',
-
+        customerId:'',
+        pay:'',
+        due:'',
+        payBy:'',
         products:[],
         categories:'',
         categoryProducts:[],
@@ -263,7 +263,7 @@
         customers:'',
         errors:'',
         carts:[],
-        vats:''
+        vat:''
 
       }
     },
@@ -274,27 +274,27 @@
         ]),
 
 
-      filtersearch(){
+      productSearch(){
       return this.products.filter(product => {
          return product.product_name.match(this.searchTerm)
       })
       },
-       getfiltersearch(){
+       categoryProductSearch(){
       return this.categoryProducts.filter(categoryProduct => {
          return categoryProduct.product_name.match(this.categoryProductSearchTerm)
        })
       },
-   qty(){
+   productsQuantity(){
     let sum = 0;
     for(let i = 0; i < this.carts.length; i++){
-          sum += (parseFloat(this.carts[i].pro_quantity));
+          sum += (parseFloat(this.carts[i].product_quantity));
         }
         return sum;
    },
-   subtotal(){
+   subTotal(){
     let sum = 0;
     for(let i = 0; i < this.carts.length; i++){
-    sum += (parseFloat(this.carts[i].pro_quantity) * parseFloat(this.carts[i].product_price));
+    sum += (parseFloat(this.carts[i].product_quantity) * parseFloat(this.carts[i].product_price));
         }
        return sum;
 
@@ -306,7 +306,6 @@
     // Cart Methods Here
   addToCart(id){
       agent.Cart.add(id)
-   // axios.get('/api/addToCart/'+id)
       .then(() => {
         Reload.$emit('AfterAdd');
         Notification.addedToCart()
@@ -315,7 +314,6 @@
   },
   cartProduct(){
       agent.Cart.products()
-      // axios.get('/api/cart/product/')
       .then((data) => {
           this.carts = data
       })
@@ -323,7 +321,6 @@
   },
   removeItem(id){
       agent.Cart.remove(id)
-   // axios.get('/api/remove/cart/'+id)
       .then(() => {
         Reload.$emit('AfterAdd');
         Notification.cart_delete()
@@ -332,7 +329,6 @@
   },
   increment(id){
       agent.Cart.increment(id)
-  // axios.get('/api/increment/'+id)
       .then(() => {
         Reload.$emit('AfterAdd');
         Notification.success()
@@ -349,19 +345,31 @@
       })
       .catch()
   },
-  vat(){
-       axios.get('/api/vats/')
-      .then(({data}) => (this.vats = data))
+  getVat(){
+      agent.Regulations.get()
+      .then((regulation) => {
+          (this.vat = regulation.vat)
+      })
       .catch()
   },
-  orderdone(){
-    let total = this.subtotal*this.vats.vat /100 + this.subtotal;
-    var data = {qty:this.qty, subtotal:this.subtotal, customer_id:this.customer_id, payby:this.payby, pay:this.pay, due:this.due, vat:this.vats.vat, total:total }
+  submitOrder(){
+    let total = this.subTotal*this.vat /100 + this.subTotal;
+    let data = {
+        productsQuantity:this.productsQuantity,
+        subTotal:this.subTotal,
+        customerId:this.customerId,
+        payBy:this.payBy,
+        pay:this.pay,
+        due:this.due,
+        vat:this.vat,
+        total:total
+    }
 
-    axios.post('/api/orderdone',data)
+    agent.Pos.submitOrder(data)
+    // axios.post('/api/orderdone',data)
        .then(() => {
           Notification.success()
-         this.$router.push({name: 'home'})
+         // this.$router.push({name: 'home'})
        })
 
   },
@@ -381,7 +389,6 @@
       .then((data) => (this.categories = data))
       .catch()
     },
-
     allCustomer(){
       agent.Customer.list()
       // axios.get('/api/customer/')

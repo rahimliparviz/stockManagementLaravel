@@ -53,7 +53,6 @@ class EmployeeController extends Controller
          $employee->phone = $request->phone;
          $employee->salary = $request->salary;
          $employee->address = $request->address;
-         $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
          $employee->photo = $image_url;
          $employee->save();
@@ -64,7 +63,6 @@ class EmployeeController extends Controller
          $employee->phone = $request->phone;
          $employee->salary = $request->salary;
          $employee->address = $request->address;
-         $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
 
          $employee->save();
@@ -103,7 +101,6 @@ class EmployeeController extends Controller
         $data['phone'] = $request->phone;
         $data['salary'] = $request->salary;
         $data['address'] = $request->address;
-        $data['nid'] = $request->nid;
         $data['joining_date'] = $request->joining_date;
         $image = $request->newphoto;
 

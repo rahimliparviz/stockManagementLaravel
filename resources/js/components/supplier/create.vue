@@ -50,8 +50,8 @@
 
 
      <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your salary" v-model="form.shopname">
-         <small class="text-danger" v-if="errors.shopname"> {{ errors.shopname[0] }} </small>
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Shop name" v-model="form.shop_name">
+         <small class="text-danger" v-if="errors.shop_name"> {{ errors.shop_name[0] }} </small>
             </div>
 
           </div>
@@ -141,7 +141,7 @@
         name: 'supplier',
         email: 'supplier@gmail.com',
         phone: '123456789',
-        shopname: null,
+        shop_name: null,
         address: null,
         photo: null
       },

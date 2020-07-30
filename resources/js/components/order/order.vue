@@ -94,8 +94,9 @@
 
   methods:{
     allOrder(){
-      axios.get('/api/orders/')
-      .then(({data}) => (this.orders = data))
+        agent.Order.list()
+      // axios.get('/api/orders/')
+      .then((data) => (this.orders = data))
       .catch()
     },
 

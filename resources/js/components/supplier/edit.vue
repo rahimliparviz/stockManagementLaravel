@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/supplier" class="btn btn-primary">All Supplier </router-link>
-   
+
  </div>
 
 
@@ -34,12 +34,12 @@
      <div class="col-md-6">
          <input type="email" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Email" v-model="form.email">
          <small class="text-danger" v-if="errors.email"> {{ errors.email[0] }} </small>
-            </div>     
-            
+            </div>
+
           </div>
         </div>
-       
-        
+
+
          <div class="form-group">
 
           <div class="form-row">
@@ -50,14 +50,14 @@
 
 
      <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Shop Name" v-model="form.shopname">
-         <small class="text-danger" v-if="errors.shopname"> {{ errors.shopname[0] }} </small>
-            </div>     
-            
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Shop Name" v-model="form.shop_name">
+         <small class="text-danger" v-if="errors.shop_name"> {{ errors.shop_name[0] }} </small>
+            </div>
+
           </div>
         </div>
 
-        
+
 
 
 
@@ -71,9 +71,9 @@
 
 
      <div class="col-md-6">
-        
-            </div>     
-            
+
+            </div>
+
           </div>
         </div>
 
@@ -91,23 +91,23 @@
 
      <div class="col-md-6">
         <img :src="form.photo" style="height: 40px; width: 40px;">
-            </div>     
-            
+            </div>
+
           </div>
         </div>
 
- 
+
 
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </div>
-        
+
       </form>
                   <hr>
                   <div class="text-center">
-  
-  
+
+
                   </div>
                   <div class="text-center">
                   </div>
@@ -141,11 +141,11 @@ import agent from '../../api/agent';
         name: '',
         email: '',
         phone: '',
-        shopname: '',
+        shop_name: '',
         address: '',
         photo: '',
         newphoto: ''
-        
+
       },
       errors:{}
     }
@@ -172,7 +172,7 @@ import agent from '../../api/agent';
       let reader = new FileReader();
       reader.onload = event =>{
         this.form.newphoto = event.target.result
-       
+
       };
       reader.readAsDataURL(file);
      }
@@ -186,12 +186,12 @@ import agent from '../../api/agent';
        })
        .catch(error =>this.errors = error.data.errors)
      },
-  } 
   }
-   
+  }
+
 </script>
 
 
 <style type="text/css">
-  
+
 </style>

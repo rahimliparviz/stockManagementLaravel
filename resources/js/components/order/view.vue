@@ -111,7 +111,7 @@
                         <th>Product Name</th>
                         <th>Product Code</th>
                         <th>Image</th>
-                        <th>Qty</th>
+                        <th>quantity</th>
                         <th>Unit Price </th>
                         <th>Total </th>
                       </tr>
@@ -121,7 +121,7 @@
                         <td>{{ detail.product_name }}</td>
                         <td>{{ detail.product_code }}</td>
                         <td><img :src="'/'+detail.image" id="em_photo"></td>
-                        <td>{{ detail.pro_quantity }}</td>
+                        <td>{{ detail.product_quantity }}</td>
                        <td>{{ detail.product_price }} $</td>
                        <td>{{ detail.sub_total }} $</td>
                       </tr>
@@ -186,12 +186,15 @@
     }
   },
   created(){
+      //      TODO - adlandirmalarda refactoring et
   	let id = this.$route.params.id
-  	axios.get('/api/order/details/'+id)
+      agent.Order.order(id)
+  	// axios.get('/api/order/details/'+id)
   	.then(({data}) => (this.orders = data))
   	.catch(console.log('error'))
 
-    axios.get('/api/order/orderdetails/'+id)
+      agent.Order.OrderPruducts(id)
+    // axios.get('/api/order/OrderPruducts/'+id)
     .then(({data}) => (this.details = data))
     .catch(console.log('error'))
 
