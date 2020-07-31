@@ -72,6 +72,24 @@ class Notification{
          }).show();
     }
 
+    itemExist(item){
+        new Noty({
+            type: 'warning',
+            layout: 'topRight',
+            text: `${item} is already  selected`,
+            timeout: 1000,
+        }).show();
+    }
+
+    stockOutForProduct(name){
+        new Noty({
+            type: 'warning',
+            layout: 'topRight',
+            text: `Stock is out for ${name} product.`,
+            timeout: 1000,
+        }).show();
+    }
+
 
 
   }

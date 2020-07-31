@@ -33,7 +33,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="salary in filtersearch" :key="salary.id">
+                      <tr v-for="salary in searchFilter" :key="salary.id">
                         <td> {{ salary.name }} </td>
 
                         <td>{{ salary.salary_month }}</td>
@@ -65,20 +65,11 @@
 
 
 <script type="text/javascript">
-    import {mapGetters} from 'vuex'
     import agent from "../../api/agent";
 
 
   export default {
-    created(){
-        if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
-      computed: {
-    ...mapGetters([
-      'token'
-    ]) },
+
     data(){
       return{
         salaries:[],
@@ -86,7 +77,7 @@
       }
     },
     computed:{
-      filtersearch(){
+      searchFilter(){
       return this.salaries.filter(salary => {
          return salary.name.match(this.searchTerm)
       })
@@ -111,10 +102,3 @@
   }
 </script>
 
-
-<style type="text/css">
-  #em_photo{
-    height: 40px;
-    width: 40px;
-  }
-</style>

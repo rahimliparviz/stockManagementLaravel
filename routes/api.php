@@ -33,7 +33,9 @@ Route::group([
 });
 
 Route::group([
-    'middleware'=>'JWT',
+//    Todo : token meselesini duzenle
+
+//    'middleware'=>'JWT',
 
 ],function ($router){
     Route::APIResource('/products', 'API\ProductController');

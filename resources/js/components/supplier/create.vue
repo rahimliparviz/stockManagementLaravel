@@ -125,16 +125,11 @@
 
 
 <script type="text/javascript">
-  import {mapGetters} from 'vuex'
   import agent from "../../api/agent";
 
 
   export default {
-    created(){
-        if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
+
     data(){
     return {
       form:{
@@ -148,10 +143,6 @@
       errors:{}
     }
   },
-      computed: {
-    ...mapGetters([
-      'token'
-    ]) },
   methods:{
     onFileSelected(event){
 
@@ -181,8 +172,3 @@
   }
 
 </script>
-
-
-<style type="text/css">
-
-</style>

@@ -1,12 +1,12 @@
- 
+
 
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/given-salary" class="btn btn-primary">Pay Salary </router-link>
-   
+
  </div>
 <br>
    <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
@@ -27,18 +27,18 @@
                       <tr>
                         <th>Month Name</th>
                         <th>Datails</th>
-                       
+
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="salary in filtersearch" :key="salary.id">
+                      <tr v-for="salary in searchFilter" :key="salary.id">
                         <td> {{ salary.salary_month }} </td>
-                        
+
             <td>
-   <router-link :to="{name: 'view-salary', params:{id:salary.salary_month}}" class="btn btn-sm btn-primary">View Salary</router-link> 
+   <router-link :to="{name: 'view-salary', params:{id:salary.salary_month}}" class="btn btn-sm btn-primary">View Salary</router-link>
             </td>
                       </tr>
-                    
+
                     </tbody>
                   </table>
                 </div>
@@ -49,7 +49,7 @@
           <!--Row-->
 
 
-   
+
   </div>
 
 
@@ -58,21 +58,12 @@
 
 
 <script type="text/javascript">
-  
-  import {mapGetters} from 'vuex'
+
   import agent from "../../api/agent";
 
 
   export default {
-    created(){
-        if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
-      computed: {
-    ...mapGetters([
-      'token'
-    ]) },
+
     data(){
       return{
         salaries:[],
@@ -80,13 +71,13 @@
       }
     },
     computed:{
-      filtersearch(){
+      searchFilter(){
       return this.salaries.filter(salary => {
          return salary.salary_month.match(this.searchTerm)
-      }) 
+      })
       }
     },
- 
+
   methods:{
     allSalary(){
       agent.Salary.list()
@@ -94,19 +85,19 @@
       .then((data) => (this.salaries = data))
       .catch()
     },
-    
+
   },
   created(){
     this.allSalary();
-  } 
-  
+  }
 
-  } 
+
+  }
 </script>
 
 
 <style type="text/css">
-  #em_photo{
+  #photo{
     height: 40px;
     width: 40px;
   }

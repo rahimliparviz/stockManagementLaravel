@@ -32,9 +32,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="supplier in filtersearch" :key="supplier.id">
+                      <tr v-for="supplier in searchFilter" :key="supplier.id">
                         <td> {{ supplier.name }} </td>
-                        <td><img :src="supplier.photo" id="em_photo"></td>
+                        <td><img :src="supplier.photo" id="photo"></td>
                         <td>{{ supplier.phone }}</td>
                         <td>{{ supplier.shop_name }}</td>
                         <td>{{ supplier.email }}</td>
@@ -64,15 +64,10 @@
 
 
 <script type="text/javascript">
-  import {mapGetters} from 'vuex'
   import agent from "../../api/agent";
 
   export default {
-    created(){
-       if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
+
     data(){
       return{
         suppliers:[],
@@ -80,10 +75,8 @@
       }
     },
     computed:{
-      ...mapGetters([
-      'token'
-    ]),
-      filtersearch(){
+
+      searchFilter(){
         return this.suppliers.filter(supplier => {
           return supplier.name.match(this.searchTerm)
         })
@@ -110,7 +103,6 @@
             }).then((result) => {
               if (result.value) {
                 agent.Supplier.delete(id)
-                // axios.delete('/api/employee/'+id)
                .then(() => {
                 this.suppliers = this.suppliers.filter(supplier => {
                   return supplier.id != id
@@ -137,7 +129,7 @@
 
 
 <style type="text/css">
-  #em_photo{
+  #photo{
     height: 40px;
     width: 40px;
   }

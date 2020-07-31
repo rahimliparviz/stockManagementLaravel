@@ -179,16 +179,11 @@
 
 
 <script type="text/javascript">
-  import {mapGetters} from 'vuex'
   import agent from "../../api/agent";
 
 
   export default {
-    created(){
-        if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
+
     data(){
     return {
      form:{
@@ -209,10 +204,6 @@
 
     }
   },
-      computed: {
-    ...mapGetters([
-      'token'
-    ]) },
   methods:{
     onFileSelected(event){
         console.log('dsadwqd')
@@ -248,7 +239,3 @@ ProductInsert(){
 
 </script>
 
-
-<style type="text/css">
-
-</style>

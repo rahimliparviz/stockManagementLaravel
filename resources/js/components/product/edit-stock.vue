@@ -1,10 +1,10 @@
 <template>
-  
+
   <div>
 
  <div class="row">
   <router-link to="/stock" class="btn btn-primary">Go Back </router-link>
-   
+
  </div>
 
 
@@ -32,23 +32,23 @@
             </div>
 
 
-     
-            
+
+
           </div>
         </div>
-       
-        
-         
+
+
+
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary btn-block">Update</button>
         </div>
-        
+
       </form>
                   <hr>
                   <div class="text-center">
-  
-  
+
+
                   </div>
                   <div class="text-center">
                   </div>
@@ -67,21 +67,16 @@
 
 
 <script type="text/javascript">
-  
+
   export default {
-    created(){
-      if (!User.loggedIn()) {
-        this.$router.push({name: '/'})
-      }
-    },
     data(){
     return {
       form:{
-         product_quantity: '' 
-        
+         product_quantity: ''
+
       },
       errors:{},
-   
+
     }
   },
   created(){
@@ -91,7 +86,7 @@
   	.catch(console.log('error'))
   },
   methods:{
-    
+
   StockUpdate(){
   	  let id = this.$route.params.id
        axios.post('/api/stock/update/'+id,this.form)
@@ -101,12 +96,7 @@
        })
        .catch(error =>this.errors = error.response.data.errors)
      },
-  } 
   }
-   
+  }
+
 </script>
-
-
-<style type="text/css">
-  
-</style>

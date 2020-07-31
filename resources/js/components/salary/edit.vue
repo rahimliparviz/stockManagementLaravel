@@ -113,20 +113,11 @@
 
 
 <script type="text/javascript">
-  import {mapGetters} from 'vuex'
   import agent from "../../api/agent";
 
 
   export default {
-    created(){
-        if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
-      computed: {
-    ...mapGetters([
-      'token'
-    ]) },
+
 
     data(){
     return {
@@ -153,7 +144,7 @@
 
   SalaryUpdate(){
   	  let id = this.$route.params.id
-    
+
       agent.Salary.update(this.form)
        // axios.post('/api/salary/update/'+id,this.form)
        .then(() => {

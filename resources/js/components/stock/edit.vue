@@ -69,20 +69,11 @@
 
 
 <script type="text/javascript">
-    import {mapGetters} from 'vuex'
     import agent from "../../api/agent";
 
 
     export default {
-        created(){
-            if (!this.token) {
-                this.$router.push({ name: "/" });
-            }
-        },
-        computed: {
-            ...mapGetters([
-                'token'
-            ]) },
+
     data(){
     return {
       form:{
@@ -96,7 +87,6 @@
   created(){
   	let id = this.$route.params.id
     agent.Product.details(id)
-  	// axios.get('/api/product/'+id)
   	.then((data) => (this.form = data))
   	.catch(console.log('error'))
 
@@ -108,7 +98,6 @@
   StockUpdate(){
   	  let id = this.$route.params.id
       agent.Stock.update(this.form)
-       // axios.post('/api/stock/update/'+id,this.form)
        .then(() => {
         this.$router.push({ name: 'stock'})
         Notification.success()

@@ -19,18 +19,22 @@ export const store = new Vuex.Store({
         token: state=>{
             return state.token
         },
-        
+        isAuthenticated:state=>{
+            return !!state.token;
+        }
+
     },mutations:{
 
         //Auth
         login:(state,payload)=>{
-           
+
             if(Token.isValid(payload.res.access_token)){
                 state.token = payload.res.access_token
                 localStorage.setItem('token',payload.res.access_token)
                 state.user = payload.res.user;
                 localStorage.setItem('user',payload.res.user)
 
+                // router.push('/home')
                 payload.router.push({ name: "home" })
                 Toast.fire({
                     icon:'success',
@@ -49,7 +53,7 @@ export const store = new Vuex.Store({
             state.user = null;
             localStorage.removeItem('token')
             localStorage.removeItem('user')
-
+            router.push({name:"login"})
             Toast.fire({
                 icon:'success',
                 title:'Logout successfully!'
@@ -90,7 +94,7 @@ export const store = new Vuex.Store({
           },
           //Auth end
 
-          //Employee 
+          //Employee
         //   createEmployee: ({ commit }, payload)=> {
         //     return new Promise((resolve, reject) => {
         //         // console.log(payload)

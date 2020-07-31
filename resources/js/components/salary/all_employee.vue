@@ -34,9 +34,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="employee in filtersearch" :key="employee.id">
+                      <tr v-for="employee in searchFilter" :key="employee.id">
                         <td> {{ employee.name }} </td>
-                        <td><img :src="employee.photo" id="em_photo"></td>
+                        <td><img :src="employee.photo" id="photo"></td>
                         <td>{{ employee.phone }}</td>
                         <td>{{ employee.salary }}</td>
                         <td>{{ employee.joining_date }}</td>
@@ -66,20 +66,11 @@
 
 
 <script type="text/javascript">
-  import {mapGetters} from 'vuex'
   import agent from "../../api/agent";
 
 
   export default {
-    created(){
-        if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
-      computed: {
-    ...mapGetters([
-      'token'
-    ]) },
+
     data(){
       return{
         employees:[],
@@ -87,7 +78,7 @@
       }
     },
     computed:{
-      filtersearch(){
+      searchFilter(){
       return this.employees.filter(employee => {
          return employee.name.match(this.searchTerm)
       })
@@ -112,7 +103,7 @@
 
 
 <style type="text/css">
-  #em_photo{
+  #photo{
     height: 40px;
     width: 40px;
   }

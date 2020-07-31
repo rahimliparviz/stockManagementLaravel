@@ -126,15 +126,10 @@
 
 
 <script type="text/javascript">
-    import {mapGetters} from 'vuex'
 import agent from '../../api/agent';
 
   export default {
-    created(){
-     if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
+
     data(){
  return {
       form:{
@@ -150,10 +145,7 @@ import agent from '../../api/agent';
       errors:{}
     }
   },
-      computed:{
-      ...mapGetters([
-      'token'
-    ])},
+
   created(){
 
     let id = this.$route.params.id

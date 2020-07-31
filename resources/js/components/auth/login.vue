@@ -62,15 +62,13 @@
     </div>
 
 
-   <h1 v-if="token">{{token}}</h1>
-    <h1 v-else>no token</h1>
+
 
 
   </div>
 </template>
 
 <script>
-import {mapActions,mapGetters} from 'vuex'
 export default {
   data() {
     return {
@@ -91,16 +89,6 @@ export default {
             })
     },
   },
-  created() {
-    if (this.token) {
-      this.$router.push({ name: "home" });
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'token'
-    ])
-   
-  },
+
 };
 </script>

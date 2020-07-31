@@ -34,10 +34,10 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="product in filtersearch" :key="product.id">
+                      <tr v-for="product in searchFilter" :key="product.id">
                         <td> {{ product.product_name }} </td>
                         <td> {{ product.product_code }} </td>
-                        <td><img :src="product.image" id="em_photo"></td>
+                        <td><img :src="product.image" id="photo"></td>
                         <td>{{ product.category_name }}</td>
                         <td>{{ product.buying_price }}</td>
                         <td>{{ product.selling_price }}</td>
@@ -68,22 +68,14 @@
 
 
 <script type="text/javascript">
-  import {mapGetters} from 'vuex'
   import agent from "../../api/agent";
 
   export default {
     created(){
         this.allProduct();
 
-        console.log(this.token)
-       if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
     },
-      computed: {
-          ...mapGetters([
-              'token'
-          ]) },
+
     data(){
       return{
         products:[],
@@ -91,7 +83,7 @@
       }
     },
     computed:{
-      filtersearch(){
+      searchFilter(){
       return this.products.filter(product => {
          return product.product_name.match(this.searchTerm)
       })
@@ -139,7 +131,7 @@
 
 
 <style type="text/css">
-  #em_photo{
+  #photo{
     height: 40px;
     width: 40px;
   }

@@ -115,11 +115,11 @@
                             <tr v-for="product in products" :key="product.id">
                                 <td> {{ product.product_name }} </td>
                                 <td> {{ product.product_code }} </td>
-                                <td><img :src="product.image" id="em_photo"></td>
+                                <td><img :src="product.image" id="photo"></td>
 
                                 <td>{{ product.buying_price }}</td>
                                 <td v-if="product.product_quantity  >= 1 "><span class="badge badge-success">Available </span></td>
-                                <td v-else=" "><span class="badge badge-danger">Stock Out </span></td>
+                                <td v-else><span class="badge badge-danger">Stock Out </span></td>
                                 <td>{{ product.product_quantity }}</td>
 
                             </tr>
@@ -144,20 +144,11 @@
 
 
 <script type="text/javascript">
-    import {mapGetters} from 'vuex'
     import agent from "../api/agent";
 
 
     export default {
-        created(){
-            if (!this.token) {
-                this.$router.push({ name: "/" });
-            }
-        },
-        computed: {
-            ...mapGetters([
-                'token'
-            ]) },
+
         data(){
             return{
                 todaysell:'',

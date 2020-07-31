@@ -159,7 +159,7 @@
             <div class="topbar-divider d-none d-sm-block"></div>
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false"> 
+                aria-haspopup="true" aria-expanded="false">
                 <!-- <img class="img-profile rounded-circle" src="{{asset('backend/img/boy.png')}}" style="max-width: 60px"> -->
                  <img class="img-profile rounded-circle" :src="baseUrl+'/backend/img/boy.png'" style="max-width: 60px">
                 <router-link to="/logout" class="ml-2 d-none d-lg-inline text-white small">Logout</router-link>
@@ -183,7 +183,7 @@
                   Logout
                 </a>
               </div>
-            </li> 
+            </li>
           </ul>
         </nav>
 </template>
@@ -201,10 +201,8 @@ import Scripts from '../../Helpers/Scripts'
                   Scripts.addScripts();
 
       // // TODO- elave etmek ucun daha yaxsi sey dusun ve logoutsa sil
-      // //scriptleri
-      // let ruangAdmin = document.createElement('script')
-      // ruangAdmin.setAttribute('src', 'http://localhost:8000/backend/js/ruang-admin.min.js')
-      // document.body.appendChild(ruangAdmin)
+
+
     },
   }
 </script>

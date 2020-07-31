@@ -43,6 +43,7 @@ axios.interceptors.response.use(undefined, error => {
 
     // }
     if (status === 500) {
+        // console.log(error.data.)
         Toast.fire({
             icon:'warning',
             title:'Server error - check the terminal for more info!'

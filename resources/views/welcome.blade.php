@@ -20,8 +20,8 @@
  <div id="app">
   <div id="wrapper">
     <!-- Sidebar -->
-    <sidebar v-if="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "></sidebar>
-    {{-- <nav id="sidebar" style="display:none"><ul v-if="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "  
+    <sidebar v-if="$route.path === '/login' || $route.path === '/register' || $route.path === '/forget' ? false : true "></sidebar>
+    {{-- <nav id="sidebar" style="display:none"><ul v-if="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "
     class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar" >
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon">
@@ -117,7 +117,7 @@
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
         <!-- TopBar -->
-            <topbar v-if="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "></topbar>
+            <topbar v-if="$route.path === '/login' || $route.path === '/register' || $route.path === '/forget' ? false : true "></topbar>
 
         {{-- <nav id="topbar" style="display:none" v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true " class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
           <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
@@ -326,8 +326,8 @@
   <script src="{{asset('backend/vendor/jquery/jquery.min.js')}}"></script>
   <script src="{{asset('js/app.js')}}"></script>
   {{-- <script src="{{asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script> --}}
-  {{-- <script src="{{asset('backend/vendor/jquery-easing/jquery.easing.min.js')}}"></script> --}} 
-  
+  {{-- <script src="{{asset('backend/vendor/jquery-easing/jquery.easing.min.js')}}"></script> --}}
+
   {{-- <script src="{{asset('backend/js/ruang-admin.min.js')}}"></script>--}}
   <script src="{{asset('backend/vendor/chart.js/Chart.min.js')}}"></script>
   {{-- <script src="{{asset('backend/js/demo/chart-area-demo.js')}}"></script>    --}}

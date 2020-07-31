@@ -179,15 +179,10 @@
 
 
 <script type="text/javascript">
-    import {mapGetters} from 'vuex'
 import agent from '../../api/agent';
 
   export default {
-    created(){
-     if (!this.token) {
-      this.$router.push({ name: "/" });
-      }
-    },
+
     data(){
     return {
       form:{
@@ -211,7 +206,6 @@ import agent from '../../api/agent';
   },
   created(){
   	let id = this.$route.params.id
-    // axios.get('/api/product/'+id)
     agent.Product.details(id)
   	.then((data) => (this.form = data))
   	.catch(console.log('error'))
@@ -252,8 +246,3 @@ import agent from '../../api/agent';
   }
 
 </script>
-
-
-<style type="text/css">
-
-</style>
