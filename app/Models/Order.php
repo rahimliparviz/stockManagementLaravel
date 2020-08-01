@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -18,7 +19,17 @@ class Order extends Model
         'order_date',
        ];
 
+    public function getCreatedAtAttribute()
+    {
+        return  Carbon::parse($this->attributes['created_at'])->format('Y-m-d');;
+    }
+
+
     public function customer(){
         return $this->belongsTo(Customer::class);
+    }
+
+    public function orderProducts(){
+        return $this->hasMany(OrderProduct::class);
     }
 }

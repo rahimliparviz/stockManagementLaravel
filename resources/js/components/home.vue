@@ -16,9 +16,9 @@
                         <div class="row align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-uppercase mb-1">Today Sell Amount</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ todaysell }}</div>
-                                <div class="mt-2 mb-0 text-muted text-xs">
-                                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ orders.selectedDaySell }}</div>
+                                <div v-if="sellPercentage" class="mt-2 mb-0 text-muted text-xs">
+                                    <span  class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{sellPercentage}}%</span>
                                     <span>Since last month</span>
                                 </div>
                             </div>
@@ -36,9 +36,9 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-uppercase mb-1">Today Income</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ income }} </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ orders.selectedDayIncome }} </div>
                                 <div class="mt-2 mb-0 text-muted text-xs">
-                                    <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
+                                    <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{sellPercentage ? sellPercentage: '-' }}%</span>
                                     <span>Since last years</span>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-uppercase mb-1">Today Due</div>
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">$ {{ due }} </div>
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">$ {{ orders.selectedDayDue }} </div>
                                 <div class="mt-2 mb-0 text-muted text-xs">
                                     <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20.4%</span>
                                     <span>Since last month</span>
@@ -76,7 +76,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-uppercase mb-1">Today Expense</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ expense }} </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ expenses.selectedDayExpense }} </div>
                                 <div class="mt-2 mb-0 text-muted text-xs">
                                     <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
                                     <span>Since yesterday</span>
@@ -151,59 +151,49 @@
 
         data(){
             return{
-                todaysell:'',
-                income:'',
-                due:'',
-                expense:'',
-                products:''
+                orders:{
+                    dayBeforeDue:0,
+                    dayBeforeIncome:0,
+                    dayBeforeSell:0,
+                    selectedDayDue:0,
+                    selectedDayIncome:0,
+                    selectedDaySell:0,
+                },
+                expenses:{
+                    dayBeforeExpense:0,
+                    selectedDayExpense:0
+                },
+                products: {}
             }
         },
+        computed:{
+          sellPercentage(){
+              if(this.orders.selectedDaySell && this.orders.dayBeforeSell){
+                  let change = this.orders.selectedDaySell - this.orders.dayBeforeSell
+                  return Math.round(change * 100 / this.orders.dayBeforeSell)
+              }
+          }
+        },
         mounted(){
-            this.TodaySell();
-            this.TodayIncome();
-            this.TodayDue();
-            this.TodayExpense();
-            this.StockOut();
+            this.dateReports()
+            this.stockOut();
         },
         methods:{
-            TodaySell(){
-                agent.Pos.sell()
-                // axios.get('/api/today/sell')
-                    .then((data) => (this.todaysell = data))
-                    .catch()
+            dateReports(){
+              agent.Reports.dateReports().
+              then((data) => {
+                  const {orders,expenses} = data;
+                  this.orders = orders
+                  this.expenses = expenses
+              })
+                  .catch()
             },
-            TodayIncome(){
-                agent.Pos.income()
-                // axios.get('/api/today/income')
-                    .then((data) => (this.income = data))
-                    .catch()
-            },
-            TodayDue(){
-                agent.Pos.due()
 
-                    // axios.get('/api/today/due')
-                    .then((data) => (this.due = data))
-                    .catch()
-            },
-            TodayExpense(){
-                agent.Pos.expense()
-
-                    // axios.get('/api/today/expense')
-                    .then((data) => (this.expense = data))
-                    .catch()
-            },
-            StockOut(){
-                agent.Pos.stockOut()
-
-                    // axios.get('/api/today/stockout')
+            stockOut(){
+                agent.Reports.stockOut()
                     .then((data) => (this.products = data))
                     .catch()
             },
         }
     }
 </script>
-
-
-<style type="text/css">
-
-</style>

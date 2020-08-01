@@ -356,7 +356,7 @@
 
                 }else {
 
-                    agent.Pos.submitOrder(data)
+                    agent.Order.submitOrder(data)
                         .then((res) => {
                             if (res.status == 'success') {
                                 this.resetData();

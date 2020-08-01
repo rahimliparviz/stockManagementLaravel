@@ -75,15 +75,16 @@ Route::group([
     Route::Get('/orders', 'API\OrderController@orders');
     Route::Get('/order/{id}', 'API\OrderController@order');
     Route::Get('/order/order-details/{id}', 'API\OrderController@OrderPruducts');
+    Route::Post('/order', 'API\OrderController@addOrder');
 
-// Admin Dashboard Route
-    Route::Get('/today/sell', 'API\PosController@TodaySell');
-    Route::Get('/today/income', 'API\PosController@TodayIncome');
-    Route::Get('/today/due', 'API\PosController@TodayDue');
-    Route::Get('/today/expense', 'API\PosController@TodayExpense');
-    Route::Get('/today/stock-out', 'API\PosController@Stockout');
-    Route::Get('/category/products/{id}', 'API\PosController@GetProduct');
-    Route::Post('/order', 'API\PosController@order');
+
+// Reports Route
+    Route::Get('reports/date/reports', 'API\ReportsController@dateReports');
+//    Route::Get('reports/today/sell', 'API\ReportsController@todaySell');
+//    Route::Get('reports/today/income', 'API\ReportsController@todayIncome');
+//    Route::Get('reports/today/due', 'API\ReportsController@todayDue');
+//    Route::Get('reports/today/expense', 'API\ReportsController@todayExpense');
+    Route::Get('reports/today/stock-out', 'API\ReportsController@stockOut');
 
 });
 

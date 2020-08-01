@@ -3,7 +3,7 @@
     <div>
 
         <div class="row">
-            <router-link to="/expense" class="btn btn-primary">All Expense</router-link>
+            <router-link to="/expenses" class="btn btn-primary">All Expense</router-link>
 
         </div>
 

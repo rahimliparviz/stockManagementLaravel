@@ -123,14 +123,17 @@ const Employee = {
       update: (data) => requests.post(`/stock/update/${data.id}`,data),
   };
 
-    const Pos = {
-        sell: () => requests.get(`/today/sell`),
-        income: () => requests.get(`/today/income`),
-        due: () => requests.get(`/today/due`),
-        expense: () => requests.get(`/today/expense`),
-        stockOut: () => requests.get(`/today/stock-out`),
-        categoryProduct: (id) => requests.get(`category/products/${id}`),
-        submitOrder: (order) => requests.post(`/order/`,order),
+    const Reports = {
+
+        dateReports: (data) => requests.getWithParams(`/reports/date/reports`,data),
+
+
+
+        // sell: () => requests.get(`/reports/today/sell`),
+        // income: () => requests.get(`/reports/today/income`),
+        // due: () => requests.get(`/reports/today/due`),
+        // expense: () => requests.get(`/reports/today/expense`),
+        stockOut: () => requests.get(`/reports/today/stock-out`),
     };
 
     const Regulations = {
@@ -140,8 +143,9 @@ const Employee = {
 const Order = {
     list: (data) => requests.getWithParams(`/orders`,data),
     order: (id) => requests.get(`/order/${id}`),
-    OrderPruducts: (id) => requests.get(`/order/order-details/${id}`),
-    search:(data)=>requests.post('/search/order',data)
+    search:(data)=>requests.post('/search/order',data),
+    submitOrder: (order) => requests.post(`/order/`,order),
+
 };
 
 const Cart = {
@@ -170,7 +174,7 @@ export default {
     Customer,
     Salary,
     Stock,
-    Pos,
+    Reports,
     Regulations,
     Order,
     Cart

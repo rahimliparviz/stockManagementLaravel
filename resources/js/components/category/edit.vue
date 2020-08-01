@@ -3,7 +3,7 @@
     <div>
 
         <div class="row">
-            <router-link to="/category" class="btn btn-primary">All Category</router-link>
+            <router-link to="/categories" class="btn btn-primary">All Category</router-link>
 
         </div>
 

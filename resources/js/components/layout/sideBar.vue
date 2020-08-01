@@ -68,7 +68,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
 
                         <router-link class="collapse-item" to="/given-salary">Add Salary</router-link>
-                        <router-link class="collapse-item" to="/salary">All Salary</router-link>
+                        <router-link class="collapse-item" to="/salaries">All Salary</router-link>
 
                     </div>
                 </div>

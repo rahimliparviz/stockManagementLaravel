@@ -3,7 +3,7 @@
     <div>
 
         <div class="row">
-            <router-link to="/order" class="btn btn-primary">Go Back</router-link>
+            <router-link to="/orders" class="btn btn-primary">Go Back</router-link>
 
         </div>
 
@@ -31,16 +31,15 @@
                                                 <div class="table-responsive">
 
                                                     <ul class="list-group">
-                                                        <li class="list-group-item"><b>Name :</b> {{ orders.name }}</li>
-                                                        <li class="list-group-item"><b>Phone :</b> {{ orders.phone }}
+                                                        <li class="list-group-item"><b>Name :</b> {{ order.customer.name }}</li>
+                                                        <li class="list-group-item"><b>Phone :</b> {{ order.customer.phone}}
                                                         </li>
-                                                        <li class="list-group-item"><b>Address :</b> {{ orders.address
+                                                        <li class="list-group-item"><b>Address :</b> {{ order.customer.address
                                                             }}
                                                         </li>
-                                                        <li class="list-group-item"><b>Date :</b> {{ orders.order_date
-                                                            }}
+                                                        <li class="list-group-item"><b>Date :</b> {{ order.created_at }}
                                                         </li>
-                                                        <li class="list-group-item"><b>Pay Through :</b> {{ orders.payby
+                                                        <li class="list-group-item"><b>Pay Through :</b> {{ order.payBy
                                                             }}
                                                         </li>
                                                     </ul>
@@ -63,16 +62,14 @@
 
 
                                                     <ul class="list-group">
-                                                        <li class="list-group-item"><b>Sub Total :</b> {{
-                                                            orders.sub_total }} $
+                                                        <li class="list-group-item"><b>Price:</b> {{order.price }} $
                                                         </li>
-                                                        <li class="list-group-item"><b>Vat :</b> {{ orders.vat }} $</li>
-                                                        <li class="list-group-item"><b>Total :</b> {{ orders.total }} $
+                                                        <li class="list-group-item"><b>Price with vat :</b> {{ order.price_with_vat }} $
                                                         </li>
-                                                        <li class="list-group-item"><b>Pay Amount :</b> {{ orders.pay }}
+                                                        <li class="list-group-item"><b>Pay Amount :</b> {{ order.pay }}
                                                             $
                                                         </li>
-                                                        <li class="list-group-item"><b>Due Amount :</b> {{ orders.due }}
+                                                        <li class="list-group-item"><b>Due Amount :</b> {{ order.due }}
                                                             $
                                                         </li>
                                                     </ul>
@@ -102,19 +99,19 @@
                                                             <th>Product Name</th>
                                                             <th>Product Code</th>
                                                             <th>Image</th>
-                                                            <th>quantity</th>
+                                                            <th>Quantity</th>
                                                             <th>Unit Price</th>
                                                             <th>Total</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        <tr v-for="detail in details">
-                                                            <td>{{ detail.product_name }}</td>
-                                                            <td>{{ detail.product_code }}</td>
-                                                            <td><img :src="'/'+detail.image" id="photo"></td>
-                                                            <td>{{ detail.product_quantity }}</td>
-                                                            <td>{{ detail.product_price }} $</td>
-                                                            <td>{{ detail.sub_total }} $</td>
+                                                        <tr v-for="orderProduct in order.order_products">
+                                                            <td>{{ orderProduct.product.product_name }}</td>
+                                                            <td>{{ orderProduct.product.product_code }}</td>
+                                                            <td><img :src="'/'+orderProduct.product.image" id="photo"></td>
+                                                            <td>{{ orderProduct.quantity }}</td>
+                                                            <td>{{ orderProduct.product.product_price }} $</td>
+                                                            <td>{{ orderProduct.price }} $</td>
                                                         </tr>
 
                                                         </tbody>
@@ -125,14 +122,6 @@
                                         </div>
                                     </div>
 
-
-                                    <hr>
-                                    <div class="text-center">
-
-
-                                    </div>
-                                    <div class="text-center">
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -154,24 +143,14 @@
 
         data() {
             return {
-
-                errors: {},
-                orders: {},
-                details: {},
+                order: {},
             }
         },
         created() {
-            //      TODO - adlandirmalarda refactoring et
-            let id = this.$route.params.id
-            agent.Order.order(id)
-                .then(({data}) => (this.orders = data))
-                .catch(console.log('error'))
-
-            agent.Order.OrderPruducts(id)
-                // axios.get('/api/order/OrderPruducts/'+id)
-                .then(({data}) => (this.details = data))
-                .catch(console.log('error'))
-
+            agent.Order.order(this.$route.params.id)
+                .then((data) => {
+                    (this.order = data)
+                })
 
         },
 

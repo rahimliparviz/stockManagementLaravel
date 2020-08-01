@@ -3,7 +3,7 @@
     <div>
 
         <div class="row">
-            <router-link to="/customer" class="btn btn-primary">All Customer</router-link>
+            <router-link to="/customers" class="btn btn-primary">All Customer</router-link>
 
         </div>
 

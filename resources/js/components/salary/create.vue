@@ -5,7 +5,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/employee" class="btn btn-primary">All Employee </router-link>
+  <router-link to="/employees" class="btn btn-primary">All Employee </router-link>
 
  </div>
 

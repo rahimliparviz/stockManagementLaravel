@@ -4196,59 +4196,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      todaysell: '',
-      income: '',
-      due: '',
-      expense: '',
-      products: ''
+      orders: {
+        dayBeforeDue: 0,
+        dayBeforeIncome: 0,
+        dayBeforeSell: 0,
+        selectedDayDue: 0,
+        selectedDayIncome: 0,
+        selectedDaySell: 0
+      },
+      expenses: {
+        dayBeforeExpense: 0,
+        selectedDayExpense: 0
+      },
+      products: {}
     };
   },
+  computed: {
+    sellPercentage: function sellPercentage() {
+      if (this.orders.selectedDaySell && this.orders.dayBeforeSell) {
+        var change = this.orders.selectedDaySell - this.orders.dayBeforeSell;
+        return Math.round(change * 100 / this.orders.dayBeforeSell);
+      }
+    }
+  },
   mounted: function mounted() {
-    this.TodaySell();
-    this.TodayIncome();
-    this.TodayDue();
-    this.TodayExpense();
-    this.StockOut();
+    this.dateReports();
+    this.stockOut();
   },
   methods: {
-    TodaySell: function TodaySell() {
+    dateReports: function dateReports() {
       var _this = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.sell() // axios.get('/api/today/sell')
-      .then(function (data) {
-        return _this.todaysell = data;
+      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Reports.dateReports().then(function (data) {
+        var orders = data.orders,
+            expenses = data.expenses;
+        _this.orders = orders;
+        _this.expenses = expenses;
       })["catch"]();
     },
-    TodayIncome: function TodayIncome() {
+    stockOut: function stockOut() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.income() // axios.get('/api/today/income')
-      .then(function (data) {
-        return _this2.income = data;
-      })["catch"]();
-    },
-    TodayDue: function TodayDue() {
-      var _this3 = this;
-
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.due() // axios.get('/api/today/due')
-      .then(function (data) {
-        return _this3.due = data;
-      })["catch"]();
-    },
-    TodayExpense: function TodayExpense() {
-      var _this4 = this;
-
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.expense() // axios.get('/api/today/expense')
-      .then(function (data) {
-        return _this4.expense = data;
-      })["catch"]();
-    },
-    StockOut: function StockOut() {
-      var _this5 = this;
-
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.stockOut() // axios.get('/api/today/stockout')
-      .then(function (data) {
-        return _this5.products = data;
+      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Reports.stockOut().then(function (data) {
+        return _this2.products = data;
       })["catch"]();
     }
   }
@@ -5063,40 +5053,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      errors: {},
-      orders: {},
-      details: {}
+      order: {}
     };
   },
   created: function created() {
     var _this = this;
 
-    //      TODO - adlandirmalarda refactoring et
-    var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.order(id).then(function (_ref) {
-      var data = _ref.data;
-      return _this.orders = data;
-    })["catch"](console.log('error'));
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.OrderPruducts(id) // axios.get('/api/order/OrderPruducts/'+id)
-    .then(function (_ref2) {
-      var data = _ref2.data;
-      return _this.details = data;
-    })["catch"](console.log('error'));
+    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.order(this.$route.params.id).then(function (data) {
+      _this.order = data;
+    });
   },
   methods: {}
 });
@@ -5479,7 +5448,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.orderProducts.length < 1) {
         Notification.warning('You have to select at least on product');
       } else {
-        _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.submitOrder(data).then(function (res) {
+        _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.submitOrder(data).then(function (res) {
           if (res.status == 'success') {
             _this4.resetData();
 
@@ -51135,7 +51104,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/category" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/categories" } },
           [_vm._v("All Category")]
         )
       ],
@@ -51279,7 +51248,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/category" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/categories" } },
           [_vm._v("All Category")]
         )
       ],
@@ -51585,7 +51554,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/customer" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/customers" } },
           [_vm._v("All Customer")]
         )
       ],
@@ -51946,7 +51915,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/customer" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/customers" } },
           [_vm._v("All Customer")]
         )
       ],
@@ -53547,7 +53516,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/expense" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/expenses" } },
           [_vm._v("All Expense")]
         )
       ],
@@ -54152,13 +54121,22 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "h5 mb-0 font-weight-bold text-gray-800" },
-                  [_vm._v("$ " + _vm._s(_vm.todaysell))]
+                  [_vm._v("$ " + _vm._s(_vm.orders.selectedDaySell))]
                 ),
                 _vm._v(" "),
-                _vm._m(1)
+                _vm.sellPercentage
+                  ? _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
+                      _c("span", { staticClass: "text-success mr-2" }, [
+                        _c("i", { staticClass: "fa fa-arrow-up" }),
+                        _vm._v(" " + _vm._s(_vm.sellPercentage) + "%")
+                      ]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Since last month")])
+                    ])
+                  : _vm._e()
               ]),
               _vm._v(" "),
-              _vm._m(2)
+              _vm._m(1)
             ])
           ])
         ])
@@ -54180,13 +54158,24 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "h5 mb-0 font-weight-bold text-gray-800" },
-                  [_vm._v("$ " + _vm._s(_vm.income) + " ")]
+                  [_vm._v("$ " + _vm._s(_vm.orders.selectedDayIncome) + " ")]
                 ),
                 _vm._v(" "),
-                _vm._m(3)
+                _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
+                  _c("span", { staticClass: "text-success mr-2" }, [
+                    _c("i", { staticClass: "fas fa-arrow-up" }),
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.sellPercentage ? _vm.sellPercentage : "-") +
+                        "%"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Since last years")])
+                ])
               ]),
               _vm._v(" "),
-              _vm._m(4)
+              _vm._m(2)
             ])
           ])
         ])
@@ -54210,13 +54199,13 @@ var render = function() {
                   {
                     staticClass: "h5 mb-0 mr-3 font-weight-bold text-gray-800"
                   },
-                  [_vm._v("$ " + _vm._s(_vm.due) + " ")]
+                  [_vm._v("$ " + _vm._s(_vm.orders.selectedDayDue) + " ")]
                 ),
                 _vm._v(" "),
-                _vm._m(5)
+                _vm._m(3)
               ]),
               _vm._v(" "),
-              _vm._m(6)
+              _vm._m(4)
             ])
           ])
         ])
@@ -54238,13 +54227,13 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "h5 mb-0 font-weight-bold text-gray-800" },
-                  [_vm._v("$ " + _vm._s(_vm.expense) + " ")]
+                  [_vm._v("$ " + _vm._s(_vm.expenses.selectedDayExpense) + " ")]
                 ),
                 _vm._v(" "),
-                _vm._m(7)
+                _vm._m(5)
               ]),
               _vm._v(" "),
-              _vm._m(8)
+              _vm._m(6)
             ])
           ])
         ])
@@ -54252,14 +54241,14 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-lg-12 mb-4" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(9),
+          _vm._m(7),
           _vm._v(" "),
           _c("div", { staticClass: "table-responsive" }, [
             _c(
               "table",
               { staticClass: "table align-items-center table-flush" },
               [
-                _vm._m(10),
+                _vm._m(8),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -54344,34 +54333,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
-      _c("span", { staticClass: "text-success mr-2" }, [
-        _c("i", { staticClass: "fa fa-arrow-up" }),
-        _vm._v(" 3.48%")
-      ]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Since last month")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-auto" }, [
       _c("i", { staticClass: "fas fa-calendar fa-2x text-primary" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
-      _c("span", { staticClass: "text-success mr-2" }, [
-        _c("i", { staticClass: "fas fa-arrow-up" }),
-        _vm._v(" 12%")
-      ]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Since last years")])
     ])
   },
   function() {
@@ -54669,7 +54632,10 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "router-link",
-                    { staticClass: "collapse-item", attrs: { to: "/salary" } },
+                    {
+                      staticClass: "collapse-item",
+                      attrs: { to: "/salaries" }
+                    },
                     [_vm._v("All Salary")]
                   )
                 ],
@@ -56092,7 +56058,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/order" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/orders" } },
           [_vm._v("Go Back")]
         )
       ],
@@ -56117,14 +56083,14 @@ var render = function() {
                           _c("ul", { staticClass: "list-group" }, [
                             _c("li", { staticClass: "list-group-item" }, [
                               _c("b", [_vm._v("Name :")]),
-                              _vm._v(" " + _vm._s(_vm.orders.name))
+                              _vm._v(" " + _vm._s(_vm.order.customer.name))
                             ]),
                             _vm._v(" "),
                             _c("li", { staticClass: "list-group-item" }, [
                               _c("b", [_vm._v("Phone :")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.phone) +
+                                  _vm._s(_vm.order.customer.phone) +
                                   "\n                                                    "
                               )
                             ]),
@@ -56133,7 +56099,7 @@ var render = function() {
                               _c("b", [_vm._v("Address :")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.address) +
+                                  _vm._s(_vm.order.customer.address) +
                                   "\n                                                    "
                               )
                             ]),
@@ -56142,7 +56108,7 @@ var render = function() {
                               _c("b", [_vm._v("Date :")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.order_date) +
+                                  _vm._s(_vm.order.created_at) +
                                   "\n                                                    "
                               )
                             ]),
@@ -56151,7 +56117,7 @@ var render = function() {
                               _c("b", [_vm._v("Pay Through :")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.payby) +
+                                  _vm._s(_vm.order.payBy) +
                                   "\n                                                    "
                               )
                             ])
@@ -56169,24 +56135,19 @@ var render = function() {
                         _c("div", { staticClass: "table-responsive" }, [
                           _c("ul", { staticClass: "list-group" }, [
                             _c("li", { staticClass: "list-group-item" }, [
-                              _c("b", [_vm._v("Sub Total :")]),
+                              _c("b", [_vm._v("Price:")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.sub_total) +
+                                  _vm._s(_vm.order.price) +
                                   " $\n                                                    "
                               )
                             ]),
                             _vm._v(" "),
                             _c("li", { staticClass: "list-group-item" }, [
-                              _c("b", [_vm._v("Vat :")]),
-                              _vm._v(" " + _vm._s(_vm.orders.vat) + " $")
-                            ]),
-                            _vm._v(" "),
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _c("b", [_vm._v("Total :")]),
+                              _c("b", [_vm._v("Price with vat :")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.total) +
+                                  _vm._s(_vm.order.price_with_vat) +
                                   " $\n                                                    "
                               )
                             ]),
@@ -56195,7 +56156,7 @@ var render = function() {
                               _c("b", [_vm._v("Pay Amount :")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.pay) +
+                                  _vm._s(_vm.order.pay) +
                                   "\n                                                        $\n                                                    "
                               )
                             ]),
@@ -56204,7 +56165,7 @@ var render = function() {
                               _c("b", [_vm._v("Due Amount :")]),
                               _vm._v(
                                 " " +
-                                  _vm._s(_vm.orders.due) +
+                                  _vm._s(_vm.order.due) +
                                   "\n                                                        $\n                                                    "
                               )
                             ])
@@ -56233,37 +56194,49 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "tbody",
-                                _vm._l(_vm.details, function(detail) {
+                                _vm._l(_vm.order.order_products, function(
+                                  orderProduct
+                                ) {
                                   return _c("tr", [
                                     _c("td", [
-                                      _vm._v(_vm._s(detail.product_name))
+                                      _vm._v(
+                                        _vm._s(
+                                          orderProduct.product.product_name
+                                        )
+                                      )
                                     ]),
                                     _vm._v(" "),
                                     _c("td", [
-                                      _vm._v(_vm._s(detail.product_code))
+                                      _vm._v(
+                                        _vm._s(
+                                          orderProduct.product.product_code
+                                        )
+                                      )
                                     ]),
                                     _vm._v(" "),
                                     _c("td", [
                                       _c("img", {
                                         attrs: {
-                                          src: "/" + detail.image,
+                                          src: "/" + orderProduct.product.image,
                                           id: "photo"
                                         }
                                       })
                                     ]),
                                     _vm._v(" "),
                                     _c("td", [
-                                      _vm._v(_vm._s(detail.product_quantity))
+                                      _vm._v(_vm._s(orderProduct.quantity))
                                     ]),
                                     _vm._v(" "),
                                     _c("td", [
                                       _vm._v(
-                                        _vm._s(detail.product_price) + " $"
+                                        _vm._s(
+                                          orderProduct.product.product_price
+                                        ) + " $"
                                       )
                                     ]),
                                     _vm._v(" "),
                                     _c("td", [
-                                      _vm._v(_vm._s(detail.sub_total) + " $")
+                                      _vm._v(_vm._s(orderProduct.price) + " $")
                                     ])
                                   ])
                                 }),
@@ -56276,13 +56249,7 @@ var render = function() {
                         _c("div", { staticClass: "card-footer" })
                       ])
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "text-center" }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "text-center" })
+                  ])
                 ])
               ])
             ])
@@ -56366,7 +56333,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Image")]),
         _vm._v(" "),
-        _c("th", [_vm._v("quantity")]),
+        _c("th", [_vm._v("Quantity")]),
         _vm._v(" "),
         _c("th", [_vm._v("Unit Price")]),
         _vm._v(" "),
@@ -57809,7 +57776,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/product" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/products" } },
           [_vm._v("All Product ")]
         )
       ],
@@ -58770,7 +58737,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/employee" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/employees" } },
           [_vm._v("All Employee ")]
         )
       ],
@@ -59133,7 +59100,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/salary" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/salaries" } },
           [_vm._v("Go Back ")]
         )
       ],
@@ -59667,7 +59634,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/salary" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/salaries" } },
           [_vm._v("Go Back")]
         )
       ],
@@ -60159,7 +60126,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/supplier" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/suppliers" } },
           [_vm._v("All Supplier ")]
         )
       ],
@@ -60506,7 +60473,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/supplier" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/suppliers" } },
           [_vm._v("All Supplier ")]
         )
       ],
@@ -77728,27 +77695,16 @@ var Stock = {
     return requests.post("/stock/update/".concat(data.id), data);
   }
 };
-var Pos = {
-  sell: function sell() {
-    return requests.get("/today/sell");
+var Reports = {
+  dateReports: function dateReports(data) {
+    return requests.getWithParams("/reports/date/reports", data);
   },
-  income: function income() {
-    return requests.get("/today/income");
-  },
-  due: function due() {
-    return requests.get("/today/due");
-  },
-  expense: function expense() {
-    return requests.get("/today/expense");
-  },
+  // sell: () => requests.get(`/reports/today/sell`),
+  // income: () => requests.get(`/reports/today/income`),
+  // due: () => requests.get(`/reports/today/due`),
+  // expense: () => requests.get(`/reports/today/expense`),
   stockOut: function stockOut() {
-    return requests.get("/today/stock-out");
-  },
-  categoryProduct: function categoryProduct(id) {
-    return requests.get("category/products/".concat(id));
-  },
-  submitOrder: function submitOrder(order) {
-    return requests.post("/order/", order);
+    return requests.get("/reports/today/stock-out");
   }
 };
 var Regulations = {
@@ -77763,11 +77719,11 @@ var Order = {
   order: function order(id) {
     return requests.get("/order/".concat(id));
   },
-  OrderPruducts: function OrderPruducts(id) {
-    return requests.get("/order/order-details/".concat(id));
-  },
   search: function search(data) {
     return requests.post('/search/order', data);
+  },
+  submitOrder: function submitOrder(order) {
+    return requests.post("/order/", order);
   }
 };
 var Cart = {
@@ -77807,7 +77763,7 @@ var User = {
   Customer: Customer,
   Salary: Salary,
   Stock: Stock,
-  Pos: Pos,
+  Reports: Reports,
   Regulations: Regulations,
   Order: Order,
   Cart: Cart // Profiles
