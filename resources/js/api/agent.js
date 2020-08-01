@@ -57,6 +57,7 @@ const responseBody = (response)=>response.data;
 
 const requests = {
     get: (url)=> axios.get(url).then(responseBody),
+    getWithParams: (url,body)=> axios.get(url, {params:body}).then(responseBody),
     post: (url,body)=> axios.post(url,body).then(responseBody),
     put: (url,body)=> axios.put(url,body).then(responseBody),
     del: (url)=> axios.delete(url).then(responseBody),
@@ -137,7 +138,7 @@ const Employee = {
     }
 
 const Order = {
-    list: () => requests.get(`/orders`),
+    list: (data) => requests.getWithParams(`/orders`,data),
     order: (id) => requests.get(`/order/${id}`),
     OrderPruducts: (id) => requests.get(`/order/order-details/${id}`),
     search:(data)=>requests.post('/search/order',data)
@@ -157,18 +158,6 @@ const User = {
     register: (user) => requests.post(`/auth/signup`, user),
 }
 
-// const Profiles = {
-//     get: (username: string): Promise<IProfile> => requests.get(`/profiles/${username}`),
-//     uploadPhoto: (photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
-//     setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
-//     deletePhoto: (id: string) => requests.del(`/photos/${id}`),
-//     updateProfile: (profile: Partial<IProfile>) => requests.put(`/profiles`, profile),
-//     follow: (username: string) => requests.post(`/profiles/${username}/follow`, {}),
-//     unfollow: (username: string) => requests.del(`/profiles/${username}/follow`),
-//     listFollowings: (username: string, predicate: string) => requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
-//     listActivities: (username: string, predicate: string) =>
-//     requests.get(`/profiles/${username}/activities?predicate=${predicate}`)
-// }
 
 export default {
     // Activities,

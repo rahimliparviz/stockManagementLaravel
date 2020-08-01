@@ -30,11 +30,11 @@
                             </thead>
                             <tbody>
                             <tr v-for="order in searchFilter" :key="order.id">
-                                <td> {{ order.name }}</td>
-                                <td> {{ order.total }} $</td>
+                                <td> {{ order.customer.name }}</td>
+                                <td> {{ order.price_with_vat }} $</td>
                                 <td> {{ order.pay }} $</td>
                                 <td> {{ order.due }} $</td>
-                                <td> {{ order.payby }}</td>
+                                <td> {{ order.payBy }}</td>
 
                                 <td>
                                     <router-link :to="{name: 'view-order', params:{id:order.id}}"
@@ -64,7 +64,6 @@
 <script type="text/javascript">
     import agent from "../../api/agent";
 
-
     export default {
 
         data() {
@@ -76,7 +75,7 @@
         computed: {
             searchFilter() {
                 return this.orders.filter(order => {
-                    return order.name.match(this.searchTerm)
+                    return order.customer.name.match(this.searchTerm)
                 })
             }
         },
@@ -84,7 +83,6 @@
         methods: {
             allOrder() {
                 agent.Order.list()
-                    // axios.get('/api/orders/')
                     .then((data) => (this.orders = data))
                     .catch()
             },

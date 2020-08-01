@@ -234,7 +234,7 @@ import agent from '../../api/agent';
   ProductUpdate(){
       agent.Product.update(this.form)
        .then(() => {
-        this.$router.push({ name: 'product'})
+        this.$router.push({ name: 'products'})
         Notification.success()
        })
        .catch(error =>{

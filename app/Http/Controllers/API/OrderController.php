@@ -3,20 +3,22 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB;
 
 class OrderController extends Controller
 {
-    public function todaysOrders(){
+    public function orders(Request $request){
 
-        $data = date('d/m/Y');
-        $order = DB::table('orders')
-            ->join('customers','orders.customer_id','customers.id')
-            ->where('order_date',$data)
-            ->select('customers.name','orders.*')
-            ->orderBy('orders.id','DESC')->get();
-        return response()->json($order);
+        $date = $request->date? Carbon::parse($request->date)  :Carbon::today();
+
+        $orders = Order::with('customer:id,name')
+            ->whereDate('created_at', $date)
+            ->get();
+
+        return response()->json($orders);
     }
 
 
@@ -29,6 +31,9 @@ class OrderController extends Controller
         return response()->json($order);
 
     }
+
+
+
 
 
     public function OrderPruducts($id){

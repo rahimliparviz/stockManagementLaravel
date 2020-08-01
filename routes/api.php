@@ -72,10 +72,9 @@ Route::group([
 
 
 // Order Route
-    Route::Get('/orders', 'API\OrderController@todaysOrders');
+    Route::Get('/orders', 'API\OrderController@orders');
     Route::Get('/order/{id}', 'API\OrderController@order');
     Route::Get('/order/order-details/{id}', 'API\OrderController@OrderPruducts');
-    Route::Post('/search/order', 'API\PosController@ordersByDate');
 
 // Admin Dashboard Route
     Route::Get('/today/sell', 'API\PosController@TodaySell');

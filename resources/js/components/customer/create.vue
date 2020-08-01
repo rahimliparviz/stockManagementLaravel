@@ -159,7 +159,7 @@
                         this.$router.push({name: 'customer'})
                         Notification.success()
                     })
-                    .catch(error => this.errors = error.response.data.errors)
+                    .catch(error => this.errors = error.data.errors)
             },
         }
     }

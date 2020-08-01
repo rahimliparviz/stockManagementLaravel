@@ -22,75 +22,46 @@ class PosController extends Controller
 
     public function order(Request $request){
 
-//        dd($request->all());
         $validatedData = $request->validate([
             'customerId' => 'required',
             'payBy' => 'required',
-        ]);
+            'pay' => 'required',
 
+        ]);
 
         $order = Order::create([
             'customer_id' => $request->customerId,
             'quantity' => $request->productsQuantity,
-            'sub_total' => $request->subtotal,
-            'vat' => $request->vat,
-            'total' => $request->total,
+            'price' => $request->price,
+            'price_with_vat' => $request->priceWithVat,
             'pay' => $request->pay,
             'due' => $request->due,
-            'payby' => $request->payBy,
-            'order_date' => date('d/m/Y'),
-            'order_month' => date('F'),
-            'order_year' => date('Y')
+            'payBy' => $request->payBy,
             ]);
-//        $data['customer_id'] = $request->customerId;
-//        $data['quantity'] = $request->productsQuantity;
-//        $data['sub_total'] = $request->subtotal;
-//        $data['vat'] = $request->vat;
-//        $data['total'] = $request->total;
-//        $data['pay'] = $request->pay;
-//        $data['due'] = $request->due;
-//        $data['payby'] = $request->payBy;
-//        $data['order_date'] = date('d/m/Y');
-//        $data['order_month'] = date('F');
-//        $data['order_year'] = date('Y');
-//        $order_id = DB::table('orders')->insertGetId($data);
+;
 
-        $orderProducts = DB::table('pos')->get();
+        $orderProducts = $request->orderProducts;
 
         foreach ($orderProducts as $orderProduct) {
             $newOrderProduct = new OrderProduct();
-            $newOrderProduct->order_id = $order->id;
-            $newOrderProduct->product_id = $orderProduct->product_id;
-            $newOrderProduct->product_quantity = $orderProduct->product_quantity;
-            $newOrderProduct->product_price = $orderProduct->product_price;
-            $newOrderProduct->sub_total = $orderProduct->sub_total;
+            $newOrderProduct->order_id = $order['id'];
+            $newOrderProduct->product_id = $orderProduct['id'];
+            $newOrderProduct->quantity = $orderProduct['selected_quantity'];
+            $newOrderProduct->price = $orderProduct['selling_price'] * $orderProduct['selected_quantity'];
             $newOrderProduct->save();
 
 
-            $product = Product::find($orderProduct->product_id);
-            $product->product_quantity-=1;
+            $product = Product::find($orderProduct['id']);
+            $product->product_quantity-=$newOrderProduct->quantity;
             $product->save();
         }
-        DB::table('pos')->delete();
-        return response('Done');
+
+        return response(['status'=>'success','message'=>'Order is done!']);
 
     }
 
 
-    public function ordersByDate(Request $request){
-        $orderdate = $request->date;
-        $newdate = new DateTime($orderdate);
-        $done = $newdate->format('d/m/Y');
 
-        $order = DB::table('orders')
-            ->join('customers','orders.customer_id','customers.id')
-            ->select('customers.name','orders.*')
-            ->where('orders.order_date',$done)
-            ->get();
-
-        return response()->json($order);
-
-    }
 
 
 

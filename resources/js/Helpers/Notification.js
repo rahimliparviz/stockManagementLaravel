@@ -31,11 +31,11 @@ class Notification{
     }
 
 
-   warning(){
+   warning(msg){
         new Noty({
       type: 'warning',
       layout: 'topRight',
-      text: 'Opps Wrong ',
+      text: msg ?? 'Opps Wrong ',
       timeout: 1000,
          }).show();
     }

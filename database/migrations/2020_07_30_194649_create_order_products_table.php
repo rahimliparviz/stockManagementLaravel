@@ -22,15 +22,12 @@ class CreateOrderProductsTable extends Migration
                 ->references('id')
                 ->on('orders')
                 ->onDelete('cascade');
-
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
-//            TODO:yuxarida referance elave edilib deye asagidakilari refactor etmek olar
-            $table->string('product_quantity')->nullable();
-            $table->string('product_price')->nullable();
-            $table->string('sub_total')->nullable();
+            $table->string('quantity')->nullable();
+            $table->string('price')->nullable();
             $table->timestamps();
         });
     }

@@ -9,13 +9,16 @@ class Order extends Model
     protected $fillable = [
         'customer_id',
         'quantity',
-        'sub_total',
+        'price',
         'vat' ,
-        'total',
+        'price_with_vat',
         'pay',
         'due',
         'payBy',
         'order_date',
-        'order_month',
-        'order_year'];
+       ];
+
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
 }

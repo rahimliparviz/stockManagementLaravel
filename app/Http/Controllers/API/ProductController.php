@@ -19,7 +19,7 @@ class ProductController extends Controller
         $product = Product::
         join('categories', 'products.category_id', 'categories.id')
             ->join('suppliers', 'products.supplier_id', 'suppliers.id')
-            ->select('categories.category_name', 'suppliers.name', 'products.*')
+            ->select('categories.category_name', 'suppliers.name as supplier_name', 'products.*')
             ->orderBy('products.id', 'DESC')
             ->get();
         return response()->json($product);
@@ -162,7 +162,6 @@ class ProductController extends Controller
 //                $product->image = $image_url;
                 $product->update($data);
 
-            dd($image_url,$product,$data);
 
         }else{
             $product->update($data);

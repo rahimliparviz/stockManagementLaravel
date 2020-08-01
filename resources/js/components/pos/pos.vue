@@ -35,22 +35,22 @@
                                 </thead>
                                 <tbody>
 
-                                <tr v-for="cart in carts" :key="cart.id">
-                                    <td>{{ cart.product_name }}</td>
+                                <tr v-for="orderProduct in orderProducts" :key="orderProduct.id">
+                                    <td>{{ orderProduct.product_name }}</td>
                                     <td><input type="text" readonly="" style="width: 30px;"
-                                               :value="cart.selected_quantity">
-                                        <button @click.prevent="increment(cart.id);"
+                                               :value="orderProduct.selected_quantity">
+                                        <button @click.prevent="increment(orderProduct.id);"
                                                 class="btn btn-sm btn-success">+
                                         </button>
-                                        <button @click.prevent="decrement(cart.id)" class="btn btn-sm btn-danger"
+                                        <button @click.prevent="decrement(orderProduct.id)" class="btn btn-sm btn-danger"
                                                 >-
                                         </button>
 <!--                                        <button class="btn btn-sm btn-danger" v-else="" disabled="">-</button>-->
 
                                     </td>
-                                    <td>{{ cart.selling_price }}</td>
-                                    <td>{{ cart.selected_quantity * cart.selling_price}}</td>
-                                    <td><a @click="removeItem(cart.id)" class="btn btn-sm btn-primary"><font
+                                    <td>{{ orderProduct.selling_price }}</td>
+                                    <td>{{ orderProduct.selected_quantity * orderProduct.selling_price}}</td>
+                                    <td><a @click="removeItem(orderProduct.id)" class="btn btn-sm btn-primary"><font
                                         color="#ffffff">X</font></a></td>
                                 </tr>
 
@@ -65,14 +65,14 @@
                                     <strong>{{ productsQuantity }}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">Sub Total:
-                                    <strong>{{ subTotal }} $</strong>
+                                    <strong>{{ price }} $</strong>
                                 </li>
 
                                 <li class="list-group-item d-flex justify-content-between align-items-center">Vat:
                                     <strong>{{ vat }} %</strong>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">Total :
-                                    <strong>{{ subTotal*vat /100 + subTotal}} $</strong>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">Total price:
+                                    <strong>{{ price * vat /100 + price}} $</strong>
                                 </li>
 
                             </ul>
@@ -98,6 +98,8 @@
                                     <option value="Cheaque">Cheaque</option>
                                     <option value="GiftCard">Gift Card</option>
                                 </select>
+                                <small class="text-danger" v-if="errors.payBy"> {{ errors.payBy[0] }} </small>
+
 
                                 <br>
                                 <button type="submit" class="btn btn-success">Submit</button>
@@ -223,22 +225,17 @@
 
 
         created() {
-
             this.allProduct();
             this.allCategory();
             this.allCustomer();
-            this.cartProduct();
             this.getVat();
-            Reload.$on('AfterAdd', () => {
-                this.cartProduct();
-            })
 
         },
         data() {
             return {
-                customerId: '',
-                pay: '',
-                due: '',
+                customerId: '1',
+                pay: '5',
+                due: '1',
                 payBy: '',
                 products: [],
                 categories: '',
@@ -247,19 +244,11 @@
                 categoryProductSearchTerm: '',
                 customers: '',
                 errors: '',
-                carts: [],
+                orderProducts: [],
                 vat: ''
 
             }
         },
-        // watch: {
-        //     firstName: function (val) {
-        //         this.fullName = val + ' ' + this.lastName
-        //     },
-        //     lastName: function (val) {
-        //         this.fullName = this.firstName + ' ' + val
-        //     }
-        // },
         computed: {
 
             productSearch() {
@@ -274,15 +263,15 @@
             },
             productsQuantity() {
                 let sum = 0;
-                for (let i = 0; i < this.carts.length; i++) {
-                    sum += (parseFloat(this.carts[i].selected_quantity));
+                for (let i = 0; i < this.orderProducts.length; i++) {
+                    sum += (parseFloat(this.orderProducts[i].selected_quantity));
                 }
                 return sum;
             },
-            subTotal() {
+            price() {
                 let sum = 0;
-                for (let i = 0; i < this.carts.length; i++) {
-                    sum += (parseFloat(this.carts[i].selected_quantity) * parseFloat(this.carts[i].selling_price));
+                for (let i = 0; i < this.orderProducts.length; i++) {
+                    sum += (parseFloat(this.orderProducts[i].selected_quantity) * parseFloat(this.orderProducts[i].selling_price));
                 }
                 return sum;
 
@@ -295,7 +284,7 @@
             // Cart Methods Here
             addToCart(product) {
 
-                if (this.carts.some(p => p.id == product.id)) {
+                if (this.orderProducts.some(p => p.id == product.id)) {
                     Notification.itemExist("Product")
                 }
                 else if(product.product_quantity == 0){
@@ -303,86 +292,44 @@
                 }
                 else{
                     product.selected_quantity = 0;
-                    this.carts.push(product)
+                    this.orderProducts.push(product)
                     this.increment(product.id)
 
                 }
-                // this.carts.$set(product.name, { product: 'Changed!'})
-                // this.carts.push(product)
-                // agent.Cart.add(id)
-                //     .then(() => {
-                //         Reload.$emit('AfterAdd');
-                //         Notification.addedToCart()
-                //     })
-                //     .catch()
-            },
-            cartProduct() {
-                agent.Cart.products()
-                    .then((data) => {
-                        this.carts = data
-                    })
-                    .catch()
+
             },
             removeItem(id) {
-                let index = this.carts.findIndex(c=>c.id == id)
-                let productInCart = this.carts.find(c=>c.id == id);
+                let index = this.orderProducts.findIndex(c=>c.id == id)
+                let productInCart = this.orderProducts.find(c=>c.id == id);
                 let product = this.products.find(p=>p.id == id);
-
                 product.product_quantity+=productInCart.selected_quantity;
-                this.$delete(this.carts,index)
-                // agent.Cart.remove(id)
-                //     .then(() => {
-                //         Reload.$emit('AfterAdd');
-                //         Notification.cart_delete()
-                //     })
-                //     .catch()
+                this.$delete(this.orderProducts,index)
+
             },
             increment(id) {
 
-                let index = this.carts.findIndex(c=>c.id == id)
-                let productInCart = this.carts.find(c=>c.id == id);
+                let index = this.orderProducts.findIndex(c=>c.id == id)
+                let productInCart = this.orderProducts.find(c=>c.id == id);
                 let product = this.products.find(p=>p.id == id);
 
                 if(productInCart.product_quantity != 0){
                     productInCart.selected_quantity ++;
                     product.product_quantity --;
-                    this.$set(this.carts, index, productInCart)
+                    this.$set(this.orderProducts, index, productInCart)
                 }
 
-
-
-                // product.selected_quantity ++;
-                // agent.Cart.increment(id)
-                //     .then(() => {
-                //         Reload.$emit('AfterAdd');
-                //         Notification.success()
-                //     })
-                //     .catch()
             },
             decrement(id) {
-                let index = this.carts.findIndex(c=>c.id == id)
-                let productInCart = this.carts.find(c=>c.id == id);
+                let index = this.orderProducts.findIndex(c=>c.id == id)
+                let productInCart = this.orderProducts.find(c=>c.id == id);
                 let product = this.products.find(p=>p.id == id);
 
                 if(productInCart.selected_quantity > 0){
                     productInCart.selected_quantity --;
                     product.product_quantity ++;
-                    this.$set(this.carts, index, productInCart)
+                    this.$set(this.orderProducts, index, productInCart)
 
                 }
-
-
-
-
-                //
-                // agent.Cart.decrement(id)
-                //
-                //     // axios.get('/api/decrement/'+id)
-                //     .then(() => {
-                //         Reload.$emit('AfterAdd');
-                //         Notification.success()
-                //     })
-                //     .catch()
             },
             getVat() {
                 agent.Regulations.get()
@@ -392,25 +339,48 @@
                     .catch()
             },
             submitOrder() {
-                let total = this.subTotal * this.vat / 100 + this.subTotal;
+                let priceWithVat = this.price * this.vat / 100 + this.price;
                 let data = {
                     productsQuantity: this.productsQuantity,
-                    subTotal: this.subTotal,
+                    price: this.price,
                     customerId: this.customerId,
                     payBy: this.payBy,
                     pay: this.pay,
                     due: this.due,
-                    vat: this.vat,
-                    total: total
+                    priceWithVat: priceWithVat,
+                    orderProducts:this.orderProducts
                 }
+                console.log(this.orderProducts.length,this.orderProducts,this.orderProducts.length < 1)
+                if (this.orderProducts.length < 1){
+                    Notification.warning('You have to select at least on product')
 
-                agent.Pos.submitOrder(data)
-                    // axios.post('/api/orderdone',data)
-                    .then(() => {
-                        Notification.success()
-                        // this.$router.push({name: 'home'})
-                    })
+                }else {
 
+                    agent.Pos.submitOrder(data)
+                        .then((res) => {
+                            if (res.status == 'success') {
+                                this.resetData();
+                                Notification.success()
+                            } else {
+                                Notification.warning()
+                            }
+
+                        })
+                        .catch(error =>this.errors = error.data.errors)
+
+                }
+            },
+
+            resetData(){
+                    this.customerId= '',
+                    this.pay= '',
+                    this.due= '',
+                    this.payBy= '',
+                    this.searchTerm= '',
+                    this.categoryProductSearchTerm= '',
+                    this.errors= '',
+                    this.orderProducts= [],
+                    this.vat= ''
             },
 
             // End Cart Methods
@@ -429,12 +399,10 @@
             allCustomer() {
                 agent.Customer.list()
                     .then((data) => (this.customers = data))
-                    .catch(console.log('error'))
+                    .catch((e)=>console.log(e))
             },
             getCategoryProducts(id) {
-                agent.Pos.categoryProduct(id)
-                    .then((data) => (this.categoryProducts = data))
-                    .catch()
+                this.categoryProducts = this.products.filter(pro=>pro.category_id == id);
             }
 
 

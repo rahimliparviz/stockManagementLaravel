@@ -2745,7 +2745,7 @@ __webpack_require__.r(__webpack_exports__);
 
         Notification.success();
       })["catch"](function (error) {
-        return _this2.errors = error.response.data.errors;
+        return _this2.errors = error.data.errors;
       });
     }
   }
@@ -4757,7 +4757,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       return this.orders.filter(function (order) {
-        return order.name.match(_this.searchTerm);
+        return order.customer.name.match(_this.searchTerm);
       });
     }
   },
@@ -4765,8 +4765,7 @@ __webpack_require__.r(__webpack_exports__);
     allOrder: function allOrder() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.list() // axios.get('/api/orders/')
-      .then(function (data) {
+      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.list().then(function (data) {
         return _this2.orders = data;
       })["catch"]();
     }
@@ -4904,7 +4903,7 @@ __webpack_require__.r(__webpack_exports__);
     searchDate: function searchDate() {
       var _this = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.search({
+      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.list({
         date: this.date
       }).then(function (data) {
         return _this.orders = data;
@@ -5331,25 +5330,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
-    var _this = this;
-
     this.allProduct();
     this.allCategory();
     this.allCustomer();
-    this.cartProduct();
     this.getVat();
-    Reload.$on('AfterAdd', function () {
-      _this.cartProduct();
-    });
   },
   data: function data() {
     return {
-      customerId: '',
-      pay: '',
-      due: '',
+      customerId: '1',
+      pay: '5',
+      due: '1',
       payBy: '',
       products: [],
       categories: '',
@@ -5358,47 +5353,39 @@ __webpack_require__.r(__webpack_exports__);
       categoryProductSearchTerm: '',
       customers: '',
       errors: '',
-      carts: [],
+      orderProducts: [],
       vat: ''
     };
   },
-  // watch: {
-  //     firstName: function (val) {
-  //         this.fullName = val + ' ' + this.lastName
-  //     },
-  //     lastName: function (val) {
-  //         this.fullName = this.firstName + ' ' + val
-  //     }
-  // },
   computed: {
     productSearch: function productSearch() {
-      var _this2 = this;
+      var _this = this;
 
       return this.products.filter(function (product) {
-        return product.product_name.match(_this2.searchTerm);
+        return product.product_name.match(_this.searchTerm);
       });
     },
     categoryProductSearch: function categoryProductSearch() {
-      var _this3 = this;
+      var _this2 = this;
 
       return this.categoryProducts.filter(function (categoryProduct) {
-        return categoryProduct.product_name.match(_this3.categoryProductSearchTerm);
+        return categoryProduct.product_name.match(_this2.categoryProductSearchTerm);
       });
     },
     productsQuantity: function productsQuantity() {
       var sum = 0;
 
-      for (var i = 0; i < this.carts.length; i++) {
-        sum += parseFloat(this.carts[i].selected_quantity);
+      for (var i = 0; i < this.orderProducts.length; i++) {
+        sum += parseFloat(this.orderProducts[i].selected_quantity);
       }
 
       return sum;
     },
-    subTotal: function subTotal() {
+    price: function price() {
       var sum = 0;
 
-      for (var i = 0; i < this.carts.length; i++) {
-        sum += parseFloat(this.carts[i].selected_quantity) * parseFloat(this.carts[i].selling_price);
+      for (var i = 0; i < this.orderProducts.length; i++) {
+        sum += parseFloat(this.orderProducts[i].selected_quantity) * parseFloat(this.orderProducts[i].selling_price);
       }
 
       return sum;
@@ -5407,7 +5394,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // Cart Methods Here
     addToCart: function addToCart(product) {
-      if (this.carts.some(function (p) {
+      if (this.orderProducts.some(function (p) {
         return p.id == product.id;
       })) {
         Notification.itemExist("Product");
@@ -5415,48 +5402,28 @@ __webpack_require__.r(__webpack_exports__);
         Notification.stockOutForProduct(product.product_name);
       } else {
         product.selected_quantity = 0;
-        this.carts.push(product);
+        this.orderProducts.push(product);
         this.increment(product.id);
-      } // this.carts.$set(product.name, { product: 'Changed!'})
-      // this.carts.push(product)
-      // agent.Cart.add(id)
-      //     .then(() => {
-      //         Reload.$emit('AfterAdd');
-      //         Notification.addedToCart()
-      //     })
-      //     .catch()
-
-    },
-    cartProduct: function cartProduct() {
-      var _this4 = this;
-
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Cart.products().then(function (data) {
-        _this4.carts = data;
-      })["catch"]();
+      }
     },
     removeItem: function removeItem(id) {
-      var index = this.carts.findIndex(function (c) {
+      var index = this.orderProducts.findIndex(function (c) {
         return c.id == id;
       });
-      var productInCart = this.carts.find(function (c) {
+      var productInCart = this.orderProducts.find(function (c) {
         return c.id == id;
       });
       var product = this.products.find(function (p) {
         return p.id == id;
       });
       product.product_quantity += productInCart.selected_quantity;
-      this.$delete(this.carts, index); // agent.Cart.remove(id)
-      //     .then(() => {
-      //         Reload.$emit('AfterAdd');
-      //         Notification.cart_delete()
-      //     })
-      //     .catch()
+      this.$delete(this.orderProducts, index);
     },
     increment: function increment(id) {
-      var index = this.carts.findIndex(function (c) {
+      var index = this.orderProducts.findIndex(function (c) {
         return c.id == id;
       });
-      var productInCart = this.carts.find(function (c) {
+      var productInCart = this.orderProducts.find(function (c) {
         return c.id == id;
       });
       var product = this.products.find(function (p) {
@@ -5466,21 +5433,14 @@ __webpack_require__.r(__webpack_exports__);
       if (productInCart.product_quantity != 0) {
         productInCart.selected_quantity++;
         product.product_quantity--;
-        this.$set(this.carts, index, productInCart);
-      } // product.selected_quantity ++;
-      // agent.Cart.increment(id)
-      //     .then(() => {
-      //         Reload.$emit('AfterAdd');
-      //         Notification.success()
-      //     })
-      //     .catch()
-
+        this.$set(this.orderProducts, index, productInCart);
+      }
     },
     decrement: function decrement(id) {
-      var index = this.carts.findIndex(function (c) {
+      var index = this.orderProducts.findIndex(function (c) {
         return c.id == id;
       });
-      var productInCart = this.carts.find(function (c) {
+      var productInCart = this.orderProducts.find(function (c) {
         return c.id == id;
       });
       var product = this.products.find(function (p) {
@@ -5490,70 +5450,79 @@ __webpack_require__.r(__webpack_exports__);
       if (productInCart.selected_quantity > 0) {
         productInCart.selected_quantity--;
         product.product_quantity++;
-        this.$set(this.carts, index, productInCart);
-      } //
-      // agent.Cart.decrement(id)
-      //
-      //     // axios.get('/api/decrement/'+id)
-      //     .then(() => {
-      //         Reload.$emit('AfterAdd');
-      //         Notification.success()
-      //     })
-      //     .catch()
-
+        this.$set(this.orderProducts, index, productInCart);
+      }
     },
     getVat: function getVat() {
-      var _this5 = this;
+      var _this3 = this;
 
       _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Regulations.get().then(function (regulation) {
-        _this5.vat = regulation.vat;
+        _this3.vat = regulation.vat;
       })["catch"]();
     },
     submitOrder: function submitOrder() {
-      var total = this.subTotal * this.vat / 100 + this.subTotal;
+      var _this4 = this;
+
+      var priceWithVat = this.price * this.vat / 100 + this.price;
       var data = {
         productsQuantity: this.productsQuantity,
-        subTotal: this.subTotal,
+        price: this.price,
         customerId: this.customerId,
         payBy: this.payBy,
         pay: this.pay,
         due: this.due,
-        vat: this.vat,
-        total: total
+        priceWithVat: priceWithVat,
+        orderProducts: this.orderProducts
       };
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.submitOrder(data) // axios.post('/api/orderdone',data)
-      .then(function () {
-        Notification.success(); // this.$router.push({name: 'home'})
-      });
+      console.log(this.orderProducts.length, this.orderProducts, this.orderProducts.length < 1);
+
+      if (this.orderProducts.length < 1) {
+        Notification.warning('You have to select at least on product');
+      } else {
+        _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.submitOrder(data).then(function (res) {
+          if (res.status == 'success') {
+            _this4.resetData();
+
+            Notification.success();
+          } else {
+            Notification.warning();
+          }
+        })["catch"](function (error) {
+          return _this4.errors = error.data.errors;
+        });
+      }
+    },
+    resetData: function resetData() {
+      this.customerId = '', this.pay = '', this.due = '', this.payBy = '', this.searchTerm = '', this.categoryProductSearchTerm = '', this.errors = '', this.orderProducts = [], this.vat = '';
     },
     // End Cart Methods
     allProduct: function allProduct() {
-      var _this6 = this;
+      var _this5 = this;
 
       _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.list().then(function (data) {
-        return _this6.products = data;
+        return _this5.products = data;
       })["catch"]();
     },
     allCategory: function allCategory() {
-      var _this7 = this;
+      var _this6 = this;
 
       _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.list().then(function (data) {
-        return _this7.categories = data;
+        return _this6.categories = data;
       })["catch"]();
     },
     allCustomer: function allCustomer() {
-      var _this8 = this;
+      var _this7 = this;
 
       _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Customer.list().then(function (data) {
-        return _this8.customers = data;
-      })["catch"](console.log('error'));
+        return _this7.customers = data;
+      })["catch"](function (e) {
+        return console.log(e);
+      });
     },
     getCategoryProducts: function getCategoryProducts(id) {
-      var _this9 = this;
-
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Pos.categoryProduct(id).then(function (data) {
-        return _this9.categoryProducts = data;
-      })["catch"]();
+      this.categoryProducts = this.products.filter(function (pro) {
+        return pro.category_id == id;
+      });
     }
   }
 });
@@ -6072,7 +6041,7 @@ __webpack_require__.r(__webpack_exports__);
 
       _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.update(this.form).then(function () {
         _this3.$router.push({
-          name: 'product'
+          name: 'products'
         });
 
         Notification.success();
@@ -55786,15 +55755,17 @@ var render = function() {
                   "tbody",
                   _vm._l(_vm.searchFilter, function(order) {
                     return _c("tr", { key: order.id }, [
-                      _c("td", [_vm._v(" " + _vm._s(order.name))]),
+                      _c("td", [_vm._v(" " + _vm._s(order.customer.name))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(" " + _vm._s(order.total) + " $")]),
+                      _c("td", [
+                        _vm._v(" " + _vm._s(order.price_with_vat) + " $")
+                      ]),
                       _vm._v(" "),
                       _c("td", [_vm._v(" " + _vm._s(order.pay) + " $")]),
                       _vm._v(" "),
                       _c("td", [_vm._v(" " + _vm._s(order.due) + " $")]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(" " + _vm._s(order.payby))]),
+                      _c("td", [_vm._v(" " + _vm._s(order.payBy))]),
                       _vm._v(" "),
                       _c(
                         "td",
@@ -56476,15 +56447,19 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "tbody",
-                        _vm._l(_vm.carts, function(cart) {
-                          return _c("tr", { key: cart.id }, [
-                            _c("td", [_vm._v(_vm._s(cart.product_name))]),
+                        _vm._l(_vm.orderProducts, function(orderProduct) {
+                          return _c("tr", { key: orderProduct.id }, [
+                            _c("td", [
+                              _vm._v(_vm._s(orderProduct.product_name))
+                            ]),
                             _vm._v(" "),
                             _c("td", [
                               _c("input", {
                                 staticStyle: { width: "30px" },
                                 attrs: { type: "text", readonly: "" },
-                                domProps: { value: cart.selected_quantity }
+                                domProps: {
+                                  value: orderProduct.selected_quantity
+                                }
                               }),
                               _vm._v(" "),
                               _c(
@@ -56494,7 +56469,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.increment(cart.id)
+                                      return _vm.increment(orderProduct.id)
                                     }
                                   }
                                 },
@@ -56512,7 +56487,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.decrement(cart.id)
+                                      return _vm.decrement(orderProduct.id)
                                     }
                                   }
                                 },
@@ -56524,12 +56499,15 @@ var render = function() {
                               )
                             ]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(cart.selling_price))]),
+                            _c("td", [
+                              _vm._v(_vm._s(orderProduct.selling_price))
+                            ]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
                                 _vm._s(
-                                  cart.selected_quantity * cart.selling_price
+                                  orderProduct.selected_quantity *
+                                    orderProduct.selling_price
                                 )
                               )
                             ]),
@@ -56541,7 +56519,7 @@ var render = function() {
                                   staticClass: "btn btn-sm btn-primary",
                                   on: {
                                     click: function($event) {
-                                      return _vm.removeItem(cart.id)
+                                      return _vm.removeItem(orderProduct.id)
                                     }
                                   }
                                 },
@@ -56588,7 +56566,7 @@ var render = function() {
                       _vm._v(
                         "Sub Total:\n                                    "
                       ),
-                      _c("strong", [_vm._v(_vm._s(_vm.subTotal) + " $")])
+                      _c("strong", [_vm._v(_vm._s(_vm.price) + " $")])
                     ]
                   ),
                   _vm._v(" "),
@@ -56611,12 +56589,12 @@ var render = function() {
                         "list-group-item d-flex justify-content-between align-items-center"
                     },
                     [
-                      _vm._v("Total :\n                                    "),
+                      _vm._v(
+                        "Total price:\n                                    "
+                      ),
                       _c("strong", [
                         _vm._v(
-                          _vm._s(
-                            (_vm.subTotal * _vm.vat) / 100 + _vm.subTotal
-                          ) + " $"
+                          _vm._s((_vm.price * _vm.vat) / 100 + _vm.price) + " $"
                         )
                       ])
                     ]
@@ -56773,6 +56751,12 @@ var render = function() {
                         ])
                       ]
                     ),
+                    _vm._v(" "),
+                    _vm.errors.payBy
+                      ? _c("small", { staticClass: "text-danger" }, [
+                          _vm._v(" " + _vm._s(_vm.errors.payBy[0]) + " ")
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("br"),
                     _vm._v(" "),
@@ -77605,6 +77589,11 @@ var requests = {
   get: function get(url) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(responseBody);
   },
+  getWithParams: function getWithParams(url, body) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url, {
+      params: body
+    }).then(responseBody);
+  },
   post: function post(url, body) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, body).then(responseBody);
   },
@@ -77768,8 +77757,8 @@ var Regulations = {
   }
 };
 var Order = {
-  list: function list() {
-    return requests.get("/orders");
+  list: function list(data) {
+    return requests.getWithParams("/orders", data);
   },
   order: function order(id) {
     return requests.get("/order/".concat(id));
@@ -77806,19 +77795,7 @@ var User = {
   register: function register(user) {
     return requests.post("/auth/signup", user);
   }
-}; // const Profiles = {
-//     get: (username: string): Promise<IProfile> => requests.get(`/profiles/${username}`),
-//     uploadPhoto: (photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
-//     setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
-//     deletePhoto: (id: string) => requests.del(`/photos/${id}`),
-//     updateProfile: (profile: Partial<IProfile>) => requests.put(`/profiles`, profile),
-//     follow: (username: string) => requests.post(`/profiles/${username}/follow`, {}),
-//     unfollow: (username: string) => requests.del(`/profiles/${username}/follow`),
-//     listFollowings: (username: string, predicate: string) => requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
-//     listActivities: (username: string, predicate: string) =>
-//     requests.get(`/profiles/${username}/activities?predicate=${predicate}`)
-// }
-
+};
 /* harmony default export */ __webpack_exports__["default"] = ({
   // Activities,
   User: User,
@@ -80652,11 +80629,11 @@ var Notification = /*#__PURE__*/function () {
     }
   }, {
     key: "warning",
-    value: function warning() {
+    value: function warning(msg) {
       new Noty({
         type: 'warning',
         layout: 'topRight',
-        text: 'Opps Wrong ',
+        text: msg !== null && msg !== void 0 ? msg : 'Opps Wrong ',
         timeout: 1000
       }).show();
     }
