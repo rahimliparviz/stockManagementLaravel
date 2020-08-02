@@ -3,7 +3,7 @@
     <div>
 
         <div class="row">
-            <router-link to="/store-customer" class="btn btn-primary">Add Customer</router-link>
+            <router-link to="/add-customer" class="btn btn-primary">Add Customer</router-link>
 
         </div>
         <br>
@@ -65,7 +65,6 @@
 
 
 <script type="text/javascript">
-    import agent from "../../api/agent";
 
     export default {
 

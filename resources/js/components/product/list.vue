@@ -37,7 +37,7 @@
                       <tr v-for="product in searchFilter" :key="product.id">
                         <td> {{ product.product_name }} </td>
                         <td> {{ product.product_code }} </td>
-                        <td><img :src="product.image" id="photo"></td>
+                        <td><img :src="product.photo" id="photo"></td>
                         <td>{{ product.category_name }}</td>
                         <td>{{ product.buying_price }}</td>
                         <td>{{ product.selling_price }}</td>
@@ -68,7 +68,6 @@
 
 
 <script type="text/javascript">
-  import agent from "../../api/agent";
 
   export default {
     created(){

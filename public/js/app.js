@@ -2232,7 +2232,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -2298,7 +2297,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2312,7 +2310,7 @@ __webpack_require__.r(__webpack_exports__);
     categoryInsert: function categoryInsert() {
       var _this = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.create(this.form).then(function () {
+      agent.Category.create(this.form).then(function () {
         _this.$router.push({
           name: 'category'
         });
@@ -2336,7 +2334,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -2402,13 +2399,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.details(id).then(function (data) {
+    agent.Category.details(id).then(function (data) {
       _this.form = data;
     })["catch"](console.log('error'));
   },
@@ -2424,7 +2420,7 @@ __webpack_require__.r(__webpack_exports__);
     categoryUpdate: function categoryUpdate() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.update(this.form).then(function () {
+      agent.Category.update(this.form).then(function () {
         _this2.$router.push({
           name: 'category'
         });
@@ -2449,7 +2445,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -2509,7 +2504,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2531,7 +2525,7 @@ __webpack_require__.r(__webpack_exports__);
     allCategories: function allCategories() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.list().then(function (data) {
+      agent.Category.list().then(function (data) {
         _this2.categories = data;
       })["catch"]();
     },
@@ -2548,7 +2542,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category["delete"](id).then(function () {
+          agent.Category["delete"](id).then(function () {
             _this3.categories = _this3.categories.filter(function (category) {
               return category.id != id;
             });
@@ -2578,7 +2572,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -2701,7 +2694,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2738,9 +2730,9 @@ __webpack_require__.r(__webpack_exports__);
     customerInsert: function customerInsert() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Customer.create(this.form).then(function () {
+      agent.Customer.create(this.form).then(function () {
         _this2.$router.push({
-          name: 'customer'
+          name: 'customers'
         });
 
         Notification.success();
@@ -2762,7 +2754,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -2885,13 +2876,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Customer.details(id).then(function (data) {
+    agent.Customer.details(id).then(function (data) {
       return _this.form = data;
     })["catch"](console.log('error'));
   },
@@ -2903,7 +2893,7 @@ __webpack_require__.r(__webpack_exports__);
         phone: '',
         address: '',
         photo: '',
-        newphoto: ''
+        newPhotoAdded: false
       },
       errors: {}
     };
@@ -2920,7 +2910,8 @@ __webpack_require__.r(__webpack_exports__);
         var reader = new FileReader();
 
         reader.onload = function (event) {
-          _this2.form.newphoto = event.target.result;
+          _this2.form.photo = event.target.result;
+          _this2.form.newPhotoAdded = true;
         };
 
         reader.readAsDataURL(file);
@@ -2929,10 +2920,9 @@ __webpack_require__.r(__webpack_exports__);
     customerUpdate: function customerUpdate() {
       var _this3 = this;
 
-      console.log(this.form);
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Customer.update(this.form).then(function () {
+      agent.Customer.update(this.form).then(function () {
         _this3.$router.push({
-          name: 'customer'
+          name: 'customers'
         });
 
         Notification.success();
@@ -2955,7 +2945,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -3022,7 +3011,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3043,7 +3031,7 @@ __webpack_require__.r(__webpack_exports__);
     allCustomer: function allCustomer() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Customer.list().then(function (data) {
+      agent.Customer.list().then(function (data) {
         return _this2.customers = data;
       })["catch"]();
     },
@@ -3060,7 +3048,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Customer["delete"](id).then(function () {
+          agent.Customer["delete"](id).then(function () {
             _this3.customers = _this3.customers.filter(function (customer) {
               return customer.id != id;
             });
@@ -3090,7 +3078,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -3247,7 +3234,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3285,7 +3271,7 @@ __webpack_require__.r(__webpack_exports__);
     employeeInsert: function employeeInsert() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Employee.create(this.form).then(function () {
+      agent.Employee.create(this.form).then(function () {
         _this2.$router.push({
           name: 'employees'
         });
@@ -3309,7 +3295,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -3466,7 +3451,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3478,7 +3462,7 @@ __webpack_require__.r(__webpack_exports__);
         salary: '',
         address: '',
         photo: '',
-        newphoto: '',
+        isNewPhotoAdded: false,
         nid: '',
         joining_date: ''
       },
@@ -3489,7 +3473,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Employee.details(id).then(function (data) {
+    agent.Employee.details(id).then(function (data) {
       _this.form = data;
     })["catch"](console.log('error'));
   },
@@ -3505,7 +3489,8 @@ __webpack_require__.r(__webpack_exports__);
         var reader = new FileReader();
 
         reader.onload = function (event) {
-          _this2.form.newphoto = event.target.result;
+          _this2.form.isNewPhotoAdded = true;
+          _this2.form.photo = event.target.result;
         };
 
         reader.readAsDataURL(file);
@@ -3514,7 +3499,7 @@ __webpack_require__.r(__webpack_exports__);
     employeeUpdate: function employeeUpdate() {
       var _this3 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Employee.update(this.form).then(function () {
+      agent.Employee.update(this.form).then(function () {
         _this3.$router.push({
           name: 'employees'
         });
@@ -3538,7 +3523,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -3608,7 +3592,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3629,7 +3612,7 @@ __webpack_require__.r(__webpack_exports__);
     allEmployee: function allEmployee() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Employee.list().then(function (data) {
+      agent.Employee.list().then(function (data) {
         _this2.employees = data;
       })["catch"]();
     },
@@ -3646,7 +3629,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Employee["delete"](id) // axios.delete('/api/employee/'+id)
+          agent.Employee["delete"](id) // axios.delete('/api/employee/'+id)
           .then(function () {
             _this3.employees = _this3.employees.filter(function (employee) {
               return employee.id != id;
@@ -3677,7 +3660,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -3752,7 +3734,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3767,7 +3748,7 @@ __webpack_require__.r(__webpack_exports__);
     expenseInsert: function expenseInsert() {
       var _this = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Expense.create(this.form).then(function () {
+      agent.Expense.create(this.form).then(function () {
         _this.$router.push({
           name: 'expense'
         });
@@ -3791,7 +3772,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -3860,20 +3840,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Expense.details(id) // axios.get('/api/expense/'+id)
-    .then(function (data) {
+    agent.Expense.details(id).then(function (data) {
       return _this.form = data;
     })["catch"](console.log('error'));
   },
@@ -3890,9 +3862,9 @@ __webpack_require__.r(__webpack_exports__);
     expenseUpdate: function expenseUpdate() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Expense.update(this.form).then(function () {
+      agent.Expense.update(this.form).then(function () {
         _this2.$router.push({
-          name: 'expense'
+          name: 'expenses'
         });
 
         Notification.success();
@@ -3914,7 +3886,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -3978,7 +3949,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3991,7 +3961,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       return this.expenses.filter(function (expense) {
-        return expense.expense_date.match(_this.searchTerm);
+        return expense.created_at.match(_this.searchTerm);
       });
     }
   },
@@ -3999,7 +3969,7 @@ __webpack_require__.r(__webpack_exports__);
     allExpense: function allExpense() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Expense.list().then(function (data) {
+      agent.Expense.list().then(function (data) {
         return _this2.expenses = data;
       })["catch"]();
     },
@@ -4016,7 +3986,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Expense["delete"](id).then(function () {
+          agent.Expense["delete"](id).then(function () {
             _this3.expenses = _this3.expenses.filter(function (expense) {
               return expense.id != id;
             });
@@ -4046,7 +4016,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -4192,7 +4161,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4213,10 +4190,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     sellPercentage: function sellPercentage() {
-      if (this.orders.selectedDaySell && this.orders.dayBeforeSell) {
-        var change = this.orders.selectedDaySell - this.orders.dayBeforeSell;
-        return Math.round(change * 100 / this.orders.dayBeforeSell);
-      }
+      return this.calculatePercentage(this.orders.dayBeforeSell, this.orders.selectedDaySell);
+    },
+    incomePercentage: function incomePercentage() {
+      return this.calculatePercentage(this.orders.dayBeforeIncome, this.orders.selectedDayIncome);
+    },
+    duePercentage: function duePercentage() {
+      return this.calculatePercentage(this.orders.dayBeforeDue, this.orders.selectedDayDue);
+    },
+    expensePercentage: function expensePercentage() {
+      return this.calculatePercentage(this.orders.dayBeforeExpense, this.orders.selectedDayExpense);
     }
   },
   mounted: function mounted() {
@@ -4224,10 +4207,16 @@ __webpack_require__.r(__webpack_exports__);
     this.stockOut();
   },
   methods: {
+    calculatePercentage: function calculatePercentage(originalValue, newValue) {
+      if (newValue && originalValue) {
+        var change = newValue - originalValue;
+        return Math.round(change * 100 / originalValue);
+      }
+    },
     dateReports: function dateReports() {
       var _this = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Reports.dateReports().then(function (data) {
+      agent.Reports.dateReports().then(function (data) {
         var orders = data.orders,
             expenses = data.expenses;
         _this.orders = orders;
@@ -4237,7 +4226,7 @@ __webpack_require__.r(__webpack_exports__);
     stockOut: function stockOut() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Reports.stockOut().then(function (data) {
+      agent.Reports.stockOut().then(function (data) {
         return _this2.products = data;
       })["catch"]();
     }
@@ -4670,7 +4659,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -4734,7 +4722,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4755,7 +4742,7 @@ __webpack_require__.r(__webpack_exports__);
     allOrder: function allOrder() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.list().then(function (data) {
+      agent.Order.list().then(function (data) {
         return _this2.orders = data;
       })["catch"]();
     }
@@ -4776,7 +4763,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -4881,7 +4867,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4893,7 +4878,7 @@ __webpack_require__.r(__webpack_exports__);
     searchDate: function searchDate() {
       var _this = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.list({
+      agent.Order.list({
         date: this.date
       }).then(function (data) {
         return _this.orders = data;
@@ -4915,7 +4900,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -5053,7 +5037,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5063,7 +5046,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.order(this.$route.params.id).then(function (data) {
+    agent.Order.order(this.$route.params.id).then(function (data) {
       _this.order = data;
     });
   },
@@ -5081,7 +5064,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -5301,7 +5283,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     this.allProduct();
@@ -5425,7 +5406,7 @@ __webpack_require__.r(__webpack_exports__);
     getVat: function getVat() {
       var _this3 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Regulations.get().then(function (regulation) {
+      agent.Regulations.get().then(function (regulation) {
         _this3.vat = regulation.vat;
       })["catch"]();
     },
@@ -5448,7 +5429,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.orderProducts.length < 1) {
         Notification.warning('You have to select at least on product');
       } else {
-        _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Order.submitOrder(data).then(function (res) {
+        agent.Order.submitOrder(data).then(function (res) {
           if (res.status == 'success') {
             _this4.resetData();
 
@@ -5468,21 +5449,21 @@ __webpack_require__.r(__webpack_exports__);
     allProduct: function allProduct() {
       var _this5 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.list().then(function (data) {
+      agent.Product.list().then(function (data) {
         return _this5.products = data;
       })["catch"]();
     },
     allCategory: function allCategory() {
       var _this6 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.list().then(function (data) {
+      agent.Category.list().then(function (data) {
         return _this6.categories = data;
       })["catch"]();
     },
     allCustomer: function allCustomer() {
       var _this7 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Customer.list().then(function (data) {
+      agent.Customer.list().then(function (data) {
         return _this7.customers = data;
       })["catch"](function (e) {
         return console.log(e);
@@ -5507,7 +5488,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -5688,7 +5668,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5701,7 +5680,7 @@ __webpack_require__.r(__webpack_exports__);
         buying_price: null,
         selling_price: null,
         buying_date: null,
-        image: null,
+        photo: null,
         product_quantity: null
       },
       errors: {},
@@ -5722,7 +5701,7 @@ __webpack_require__.r(__webpack_exports__);
         var reader = new FileReader();
 
         reader.onload = function (event) {
-          _this.form.image = event.target.result;
+          _this.form.photo = event.target.result;
           console.log(_this.form);
         };
 
@@ -5732,10 +5711,10 @@ __webpack_require__.r(__webpack_exports__);
     ProductInsert: function ProductInsert() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.create(this.form) //  axios.post('/api/product',this.form)
+      agent.Product.create(this.form) //  axios.post('/api/product',this.form)
       .then(function () {
         _this2.$router.push({
-          name: 'product'
+          name: 'products'
         });
 
         Notification.success();
@@ -5747,10 +5726,10 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this3 = this;
 
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.list().then(function (data) {
+    agent.Category.list().then(function (data) {
       return _this3.categories = data;
     });
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Supplier.list().then(function (data) {
+    agent.Supplier.list().then(function (data) {
       return _this3.suppliers = data;
     });
   }
@@ -5767,7 +5746,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -5948,7 +5926,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5958,7 +5935,7 @@ __webpack_require__.r(__webpack_exports__);
         category_id: '',
         supplier_id: '',
         root: '',
-        image: '',
+        photo: '',
         buying_price: '',
         selling_price: '',
         buying_date: '',
@@ -5974,15 +5951,15 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.details(id).then(function (data) {
+    agent.Product.details(id).then(function (data) {
       return _this.form = data;
     })["catch"](console.log('error')); // Category Collected
 
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Category.list().then(function (data) {
+    agent.Category.list().then(function (data) {
       return _this.categories = data;
     }); // Supplier Collected
 
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Supplier.list().then(function (data) {
+    agent.Supplier.list().then(function (data) {
       return _this.suppliers = data;
     });
   },
@@ -5998,7 +5975,7 @@ __webpack_require__.r(__webpack_exports__);
         var reader = new FileReader();
 
         reader.onload = function (event) {
-          _this2.form.image = event.target.result;
+          _this2.form.photo = event.target.result;
           _this2.form.imageChanged = true;
         };
 
@@ -6008,7 +5985,7 @@ __webpack_require__.r(__webpack_exports__);
     ProductUpdate: function ProductUpdate() {
       var _this3 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.update(this.form).then(function () {
+      agent.Product.update(this.form).then(function () {
         _this3.$router.push({
           name: 'products'
         });
@@ -6033,7 +6010,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -6103,7 +6079,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     this.allProduct();
@@ -6127,7 +6102,7 @@ __webpack_require__.r(__webpack_exports__);
     allProduct: function allProduct() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.list().then(function (data) {
+      agent.Product.list().then(function (data) {
         return _this2.products = data;
       })["catch"]();
     },
@@ -6144,7 +6119,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product["delete"](id).then(function () {
+          agent.Product["delete"](id).then(function () {
             _this3.products = _this3.products.filter(function (product) {
               return product.id != id;
             });
@@ -6171,7 +6146,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -6239,7 +6213,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6260,7 +6233,7 @@ __webpack_require__.r(__webpack_exports__);
     allEmployee: function allEmployee() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Employee.list().then(function (data) {
+      agent.Employee.list().then(function (data) {
         return _this2.employees = data;
       })["catch"]();
     }
@@ -6281,7 +6254,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -6395,7 +6367,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6413,7 +6384,7 @@ __webpack_require__.r(__webpack_exports__);
 
     var id = this.$route.params.id; // this.employeeId = id;
 
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Employee.details(id) // axios.get('/api/employee/'+id)
+    agent.Employee.details(id) // axios.get('/api/employee/'+id)
     .then(function (data) {
       return _this.form = data;
     })["catch"](console.log('error'));
@@ -6423,7 +6394,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       console.log(this.form);
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Salary.pay(this.form) //  axios.post('/api/salary/paid/'+id,this.form)
+      agent.Salary.pay(this.form) //  axios.post('/api/salary/paid/'+id,this.form)
       .then(function () {
         _this2.$router.push({
           name: 'given-salary'
@@ -6448,7 +6419,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -6563,7 +6533,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6581,7 +6550,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Salary.edit(id) // axios.get('/api/edit/salary/'+id)
+    agent.Salary.edit(id) // axios.get('/api/edit/salary/'+id)
     .then(function (data) {
       return _this.form = data;
     })["catch"](console.log('error'));
@@ -6591,7 +6560,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var id = this.$route.params.id;
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Salary.update(this.form) // axios.post('/api/salary/update/'+id,this.form)
+      agent.Salary.update(this.form) // axios.post('/api/salary/update/'+id,this.form)
       .then(function () {
         _this2.$router.push({
           name: 'salary'
@@ -6616,7 +6585,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -6676,7 +6644,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6697,7 +6664,7 @@ __webpack_require__.r(__webpack_exports__);
     allSalary: function allSalary() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Salary.list() // axios.get('/api/salary/')
+      agent.Salary.list() // axios.get('/api/salary/')
       .then(function (data) {
         return _this2.salaries = data;
       })["catch"]();
@@ -6719,7 +6686,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -6786,7 +6752,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6808,7 +6773,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var id = this.$route.params.id;
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Salary.view(id) // axios.get('/api/salary/view/'+id)
+      agent.Salary.view(id) // axios.get('/api/salary/view/'+id)
       .then(function (data) {
         return _this2.salaries = data;
       })["catch"](function (error) {
@@ -6832,7 +6797,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -6903,7 +6867,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6917,7 +6880,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.details(id).then(function (data) {
+    agent.Product.details(id).then(function (data) {
       return _this.form = data;
     })["catch"](console.log('error'));
   },
@@ -6926,7 +6889,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var id = this.$route.params.id;
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Stock.update(this.form).then(function () {
+      agent.Stock.update(this.form).then(function () {
         _this2.$router.push({
           name: 'stock'
         });
@@ -6950,7 +6913,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -7022,7 +6984,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7043,7 +7004,7 @@ __webpack_require__.r(__webpack_exports__);
     allProduct: function allProduct() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Product.list() // axios.get('/api/product/')
+      agent.Product.list() // axios.get('/api/product/')
       .then(function (data) {
         // console.log(data)
         _this2.products = data;
@@ -7066,7 +7027,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -7193,7 +7153,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7229,7 +7188,7 @@ __webpack_require__.r(__webpack_exports__);
     supplierInsert: function supplierInsert() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Supplier.create(this.form).then(function () {
+      agent.Supplier.create(this.form).then(function () {
         _this2.$router.push({
           name: 'suppliers'
         });
@@ -7254,7 +7213,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -7382,7 +7340,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7393,7 +7350,7 @@ __webpack_require__.r(__webpack_exports__);
         shop_name: '',
         address: '',
         photo: '',
-        newphoto: ''
+        isPhotoChanged: false
       },
       errors: {}
     };
@@ -7402,7 +7359,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     var id = this.$route.params.id;
-    _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Supplier.details(id).then(function (data) {
+    agent.Supplier.details(id).then(function (data) {
       _this.form = data;
     })["catch"](console.log('error'));
   },
@@ -7418,7 +7375,8 @@ __webpack_require__.r(__webpack_exports__);
         var reader = new FileReader();
 
         reader.onload = function (event) {
-          _this2.form.newphoto = event.target.result;
+          _this2.form.isPhotoChanged = true;
+          _this2.form.photo = event.target.result;
         };
 
         reader.readAsDataURL(file);
@@ -7428,7 +7386,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       var id = this.$route.params.id;
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Supplier.update(this.form).then(function () {
+      agent.Supplier.update(this.form).then(function () {
         _this3.$router.push({
           name: 'suppliers'
         });
@@ -7452,7 +7410,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/agent */ "./resources/js/api/agent.js");
 //
 //
 //
@@ -7518,7 +7475,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7539,7 +7495,7 @@ __webpack_require__.r(__webpack_exports__);
     allSupplier: function allSupplier() {
       var _this2 = this;
 
-      _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Supplier.list().then(function (data) {
+      agent.Supplier.list().then(function (data) {
         _this2.suppliers = data;
       })["catch"]();
     },
@@ -7556,7 +7512,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _api_agent__WEBPACK_IMPORTED_MODULE_0__["default"].Supplier["delete"](id).then(function () {
+          agent.Supplier["delete"](id).then(function () {
             _this3.suppliers = _this3.suppliers.filter(function (supplier) {
               return supplier.id != id;
             });
@@ -52276,7 +52232,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/store-customer" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/add-customer" } },
           [_vm._v("Add Customer")]
         )
       ],
@@ -53253,9 +53209,7 @@ var render = function() {
                                     height: "40px",
                                     width: "40px"
                                   },
-                                  attrs: {
-                                    src: _vm.baseUrl + "/" + _vm.form.photo
-                                  }
+                                  attrs: { src: _vm.form.photo }
                                 })
                               ])
                             : _vm._e()
@@ -53727,7 +53681,7 @@ var render = function() {
       [
         _c(
           "router-link",
-          { staticClass: "btn btn-primary", attrs: { to: "/expense" } },
+          { staticClass: "btn btn-primary", attrs: { to: "/expenses" } },
           [_vm._v("All Expense")]
         )
       ],
@@ -53846,13 +53800,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm._m(3)
                     ]
-                  ),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "text-center" }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "text-center" })
+                  )
                 ])
               ])
             ])
@@ -53992,7 +53940,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(" " + _vm._s(expense.amount))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(" " + _vm._s(expense.expense_date))]),
+                      _c("td", [_vm._v(" " + _vm._s(expense.created_at))]),
                       _vm._v(" "),
                       _c(
                         "td",
@@ -54126,12 +54074,32 @@ var render = function() {
                 _vm._v(" "),
                 _vm.sellPercentage
                   ? _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
-                      _c("span", { staticClass: "text-success mr-2" }, [
-                        _c("i", { staticClass: "fa fa-arrow-up" }),
-                        _vm._v(" " + _vm._s(_vm.sellPercentage) + "%")
-                      ]),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "mr-2",
+                          class: [
+                            _vm.sellPercentage > 0 ? "text-success" : "",
+                            "text-danger"
+                          ]
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas",
+                            class: [
+                              _vm.sellPercentage > 0 ? "fa-arrow-up" : "",
+                              "fa-arrow-down"
+                            ]
+                          }),
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(_vm.sellPercentage) +
+                              "%\n                                "
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c("span", [_vm._v("Since last month")])
+                      _c("span", [_vm._v("Since last day")])
                     ])
                   : _vm._e()
               ]),
@@ -54158,21 +54126,45 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "h5 mb-0 font-weight-bold text-gray-800" },
-                  [_vm._v("$ " + _vm._s(_vm.orders.selectedDayIncome) + " ")]
+                  [
+                    _vm._v(
+                      "$ " +
+                        _vm._s(_vm.orders.selectedDayIncome) +
+                        "\n                            "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
-                  _c("span", { staticClass: "text-success mr-2" }, [
-                    _c("i", { staticClass: "fas fa-arrow-up" }),
-                    _vm._v(
-                      " " +
-                        _vm._s(_vm.sellPercentage ? _vm.sellPercentage : "-") +
-                        "%"
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("Since last years")])
-                ])
+                _vm.incomePercentage
+                  ? _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
+                      _c(
+                        "span",
+                        {
+                          staticClass: "mr-2",
+                          class: [
+                            _vm.incomePercentage > 0 ? "text-success" : "",
+                            "text-danger"
+                          ]
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas",
+                            class: [
+                              _vm.incomePercentage > 0 ? "fa-arrow-up" : "",
+                              "fa-arrow-down"
+                            ]
+                          }),
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(_vm.incomePercentage) +
+                              "%\n                                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Since last day")])
+                    ])
+                  : _vm._e()
               ]),
               _vm._v(" "),
               _vm._m(2)
@@ -54199,13 +54191,48 @@ var render = function() {
                   {
                     staticClass: "h5 mb-0 mr-3 font-weight-bold text-gray-800"
                   },
-                  [_vm._v("$ " + _vm._s(_vm.orders.selectedDayDue) + " ")]
+                  [
+                    _vm._v(
+                      "$ " +
+                        _vm._s(_vm.orders.selectedDayDue) +
+                        "\n                            "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _vm._m(3)
+                _vm.duePercentage
+                  ? _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
+                      _c(
+                        "span",
+                        {
+                          staticClass: "mr-2",
+                          class: [
+                            _vm.duePercentage > 0 ? "text-success" : "",
+                            "text-danger"
+                          ]
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas",
+                            class: [
+                              _vm.duePercentage > 0 ? "fa-arrow-up" : "",
+                              "fa-arrow-down"
+                            ]
+                          }),
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(_vm.duePercentage) +
+                              "%\n                                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Since last day")])
+                    ])
+                  : _vm._e()
               ]),
               _vm._v(" "),
-              _vm._m(4)
+              _vm._m(3)
             ])
           ])
         ])
@@ -54227,13 +54254,48 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "h5 mb-0 font-weight-bold text-gray-800" },
-                  [_vm._v("$ " + _vm._s(_vm.expenses.selectedDayExpense) + " ")]
+                  [
+                    _vm._v(
+                      "$ " +
+                        _vm._s(_vm.expenses.selectedDayExpense) +
+                        "\n                            "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _vm._m(5)
+                _vm.expensePercentage
+                  ? _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
+                      _c(
+                        "span",
+                        {
+                          staticClass: "mr-2",
+                          class: [
+                            _vm.expensePercentage > 0 ? "text-success" : "",
+                            "text-danger"
+                          ]
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas",
+                            class: [
+                              _vm.expensePercentage > 0 ? "fa-arrow-up" : "",
+                              "fa-arrow-down"
+                            ]
+                          }),
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(_vm.expensePercentage) +
+                              "%\n                                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Since last day")])
+                    ])
+                  : _vm._e()
               ]),
               _vm._v(" "),
-              _vm._m(6)
+              _vm._m(4)
             ])
           ])
         ])
@@ -54241,26 +54303,22 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-lg-12 mb-4" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(7),
+          _vm._m(5),
           _vm._v(" "),
           _c("div", { staticClass: "table-responsive" }, [
             _c(
               "table",
               { staticClass: "table align-items-center table-flush" },
               [
-                _vm._m(8),
+                _vm._m(6),
                 _vm._v(" "),
                 _c(
                   "tbody",
                   _vm._l(_vm.products, function(product) {
                     return _c("tr", { key: product.id }, [
-                      _c("td", [
-                        _vm._v(" " + _vm._s(product.product_name) + " ")
-                      ]),
+                      _c("td", [_vm._v(" " + _vm._s(product.product_name))]),
                       _vm._v(" "),
-                      _c("td", [
-                        _vm._v(" " + _vm._s(product.product_code) + " ")
-                      ]),
+                      _c("td", [_vm._v(" " + _vm._s(product.product_code))]),
                       _vm._v(" "),
                       _c("td", [
                         _c("img", {
@@ -54310,21 +54368,6 @@ var staticRenderFns = [
       [
         _c("h1", { staticClass: "h3 mb-0 text-gray-800" }, [
           _vm._v("Dashboard")
-        ]),
-        _vm._v(" "),
-        _c("ol", { staticClass: "breadcrumb" }, [
-          _c("li", { staticClass: "breadcrumb-item" }, [
-            _c("a", { attrs: { href: "./" } }, [_vm._v("Home")])
-          ]),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "breadcrumb-item active",
-              attrs: { "aria-current": "page" }
-            },
-            [_vm._v("Dashboard")]
-          )
         ])
       ]
     )
@@ -54349,34 +54392,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
-      _c("span", { staticClass: "text-success mr-2" }, [
-        _c("i", { staticClass: "fas fa-arrow-up" }),
-        _vm._v(" 20.4%")
-      ]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Since last month")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-auto" }, [
       _c("i", { staticClass: "fas fa-users fa-2x text-info" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-2 mb-0 text-muted text-xs" }, [
-      _c("span", { staticClass: "text-danger mr-2" }, [
-        _c("i", { staticClass: "fas fa-arrow-down" }),
-        _vm._v(" 1.10%")
-      ]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Since yesterday")])
     ])
   },
   function() {
@@ -57679,10 +57696,10 @@ var render = function() {
                               on: { change: _vm.onFileSelected }
                             }),
                             _vm._v(" "),
-                            _vm.errors.image
+                            _vm.errors.photo
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    " " + _vm._s(_vm.errors.image[0]) + " "
+                                    " " + _vm._s(_vm.errors.photo[0]) + " "
                                   )
                                 ])
                               : _vm._e(),
@@ -57700,7 +57717,7 @@ var render = function() {
                           _c("div", { staticClass: "col-md-6" }, [
                             _c("img", {
                               staticStyle: { height: "40px", width: "40px" },
-                              attrs: { src: _vm.form.image }
+                              attrs: { src: _vm.form.photo }
                             })
                           ])
                         ])
@@ -58282,10 +58299,10 @@ var render = function() {
                               on: { change: _vm.onFileSelected }
                             }),
                             _vm._v(" "),
-                            _vm.errors.image
+                            _vm.errors.photo
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    " " + _vm._s(_vm.errors.image[0]) + " "
+                                    " " + _vm._s(_vm.errors.photo[0]) + " "
                                   )
                                 ])
                               : _vm._e(),
@@ -58303,7 +58320,7 @@ var render = function() {
                           _c("div", { staticClass: "col-md-6" }, [
                             _c("img", {
                               staticStyle: { height: "40px", width: "40px" },
-                              attrs: { src: _vm.form.image }
+                              attrs: { src: _vm.form.photo }
                             })
                           ])
                         ])
@@ -58439,7 +58456,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [
                         _c("img", {
-                          attrs: { src: product.image, id: "photo" }
+                          attrs: { src: product.photo, id: "photo" }
                         })
                       ]),
                       _vm._v(" "),
@@ -77699,10 +77716,6 @@ var Reports = {
   dateReports: function dateReports(data) {
     return requests.getWithParams("/reports/date/reports", data);
   },
-  // sell: () => requests.get(`/reports/today/sell`),
-  // income: () => requests.get(`/reports/today/income`),
-  // due: () => requests.get(`/reports/today/due`),
-  // expense: () => requests.get(`/reports/today/expense`),
   stockOut: function stockOut() {
     return requests.get("/reports/today/stock-out");
   }
@@ -77724,23 +77737,6 @@ var Order = {
   },
   submitOrder: function submitOrder(order) {
     return requests.post("/order/", order);
-  }
-};
-var Cart = {
-  add: function add(id) {
-    return requests.get("/cart/add/".concat(id));
-  },
-  remove: function remove(id) {
-    return requests.get("/cart/remove/".concat(id));
-  },
-  products: function products() {
-    return requests.get("/cart/products");
-  },
-  increment: function increment(id) {
-    return requests.get("/cart/product/increment/".concat(id));
-  },
-  decrement: function decrement(id) {
-    return requests.get("/cart/product/decrement/".concat(id));
   }
 };
 var User = {
@@ -77765,9 +77761,7 @@ var User = {
   Stock: Stock,
   Reports: Reports,
   Regulations: Regulations,
-  Order: Order,
-  Cart: Cart // Profiles
-
+  Order: Order
 });
 
 /***/ }),
@@ -77787,9 +77781,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_layout_topBar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/layout/topBar.vue */ "./resources/js/components/layout/topBar.vue");
 /* harmony import */ var _store_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store/store */ "./resources/js/store/store.js");
 /* harmony import */ var _router_roter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./router/roter */ "./resources/js/router/roter.js");
-/* harmony import */ var _helpers_Notification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers/Notification */ "./resources/js/helpers/Notification.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _api_agent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./api/agent */ "./resources/js/api/agent.js");
+/* harmony import */ var _helpers_Notification__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./helpers/Notification */ "./resources/js/helpers/Notification.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_7__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -77801,29 +77796,29 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
- //Notification
+
+ //Axios agent
+
+window.agent = _api_agent__WEBPACK_IMPORTED_MODULE_5__["default"]; //Notification
 
 
-window.Notification = _helpers_Notification__WEBPACK_IMPORTED_MODULE_5__["default"]; //TODO - Reloadi sil ve istifade olunan yerleri refaktor et
-
-window.Reload = new vue__WEBPACK_IMPORTED_MODULE_0___default.a(); // Sweet Alert start
+window.Notification = _helpers_Notification__WEBPACK_IMPORTED_MODULE_6__["default"]; // Sweet Alert start
 
 
-window.Swal = sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a;
-var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.mixin({
+window.Swal = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a;
+var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
   onOpen: function onOpen(toast) {
-    toast.addEventListener('mouseenter', sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.stopTimer);
-    toast.addEventListener('mouseleave', sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.resumeTimer);
+    toast.addEventListener('mouseenter', sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.stopTimer);
+    toast.addEventListener('mouseleave', sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.resumeTimer);
   }
 });
 window.Toast = Toast;
 window.baseUrl = window.location.origin; // Sweet Alert End
-// console.log(router.history.current.path
 //   )
 
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
@@ -77833,8 +77828,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   components: {
     'sidebar': _components_layout_sideBar__WEBPACK_IMPORTED_MODULE_1__["default"],
     'topbar': _components_layout_topBar_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
-  } // render: h => h(App)
-
+  }
 });
 
 /***/ }),

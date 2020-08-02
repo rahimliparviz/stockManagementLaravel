@@ -3,7 +3,7 @@
     <div>
 
         <div class="row">
-            <router-link to="/expense" class="btn btn-primary">All Expense</router-link>
+            <router-link to="/expenses" class="btn btn-primary">All Expense</router-link>
 
         </div>
 
@@ -52,13 +52,7 @@
                                         </div>
 
                                     </form>
-                                    <hr>
-                                    <div class="text-center">
 
-
-                                    </div>
-                                    <div class="text-center">
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -73,15 +67,12 @@
 
 
 <script type="text/javascript">
-    import agent from "../../api/agent";
 
 
     export default {
         created() {
-
             let id = this.$route.params.id
             agent.Expense.details(id)
-                // axios.get('/api/expense/'+id)
                 .then((data) => (this.form = data))
                 .catch(console.log('error'))
 
@@ -102,7 +93,7 @@
             expenseUpdate() {
                 agent.Expense.update(this.form)
                     .then(() => {
-                        this.$router.push({name: 'expense'})
+                        this.$router.push({name: 'expenses'})
                         Notification.success()
                     })
                     .catch(error => this.errors = error.data.errors)

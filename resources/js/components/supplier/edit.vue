@@ -126,7 +126,6 @@
 
 
 <script type="text/javascript">
-import agent from '../../api/agent';
 
   export default {
 
@@ -139,7 +138,7 @@ import agent from '../../api/agent';
         shop_name: '',
         address: '',
         photo: '',
-        newphoto: ''
+        isPhotoChanged: false
 
       },
       errors:{}
@@ -163,7 +162,8 @@ import agent from '../../api/agent';
      }else{
       let reader = new FileReader();
       reader.onload = event =>{
-        this.form.newphoto = event.target.result
+          this.form.isPhotoChanged = true;
+        this.form.photo = event.target.result
 
       };
       reader.readAsDataURL(file);

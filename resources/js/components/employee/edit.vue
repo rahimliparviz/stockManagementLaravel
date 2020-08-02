@@ -121,7 +121,7 @@
                                                 </div>
                                                 <div class="col-md-6" v-if='form.photo'>
 
-                                                    <img :src="baseUrl+'/'+form.photo"
+                                                    <img :src="form.photo"
                                                          style="height: 40px; width: 40px;">
                                                 </div>
 
@@ -155,7 +155,6 @@
 
 
 <script type="text/javascript">
-    import agent from '../../api/agent';
 
     export default {
 
@@ -169,7 +168,7 @@
                     salary: '',
                     address: '',
                     photo: '',
-                    newphoto: '',
+                    isNewPhotoAdded: false,
                     nid: '',
                     joining_date: ''
                 },
@@ -195,7 +194,8 @@
                 } else {
                     let reader = new FileReader();
                     reader.onload = event => {
-                        this.form.newphoto = event.target.result
+                        this.form.isNewPhotoAdded = true;
+                        this.form.photo = event.target.result
 
                     };
                     reader.readAsDataURL(file);

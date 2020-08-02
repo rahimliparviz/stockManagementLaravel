@@ -121,7 +121,6 @@
 
 
 <script type="text/javascript">
-    import agent from "../../api/agent";
 
 
     export default {
@@ -156,7 +155,7 @@
             customerInsert() {
                 agent.Customer.create(this.form)
                     .then(() => {
-                        this.$router.push({name: 'customer'})
+                        this.$router.push({name: 'customers'})
                         Notification.success()
                     })
                     .catch(error => this.errors = error.data.errors)

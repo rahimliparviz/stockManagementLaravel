@@ -58,7 +58,6 @@
 
 
 <script type="text/javascript">
-    import agent from "../../api/agent";
 
     export default {
 

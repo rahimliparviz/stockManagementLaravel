@@ -33,7 +33,7 @@
                             <tr v-for="expense in searchFilter" :key="expense.id">
                                 <td> {{ expense.details }}</td>
                                 <td> {{ expense.amount }}</td>
-                                <td> {{ expense.expense_date }}</td>
+                                <td> {{ expense.created_at }}</td>
 
                                 <td>
                                     <router-link :to="{name: 'edit-expense', params:{id:expense.id}}"
@@ -62,7 +62,6 @@
 
 
 <script type="text/javascript">
-    import agent from "../../api/agent";
 
     export default {
 
@@ -77,7 +76,7 @@
 
             searchFilter() {
                 return this.expenses.filter(expense => {
-                    return expense.expense_date.match(this.searchTerm)
+                    return expense.created_at.match(this.searchTerm)
                 })
             }
         },

@@ -10,18 +10,22 @@ import sideBar from './components/layout/sideBar'
 import topBar from './components/layout/topBar.vue'
 import {store} from './store/store'
 import router from './router/roter';
+import agent from "./api/agent";
+
+
+//Axios agent
+window.agent = agent;
+
 
 //Notification
 import Notification from './helpers/Notification'
 window.Notification = Notification;
-
-//TODO - Reloadi sil ve istifade olunan yerleri refaktor et
-window.Reload = new Vue();
-
-
  // Sweet Alert start
  import Swal from 'sweetalert2'
  window.Swal = Swal;
+
+
+
  const Toast = Swal.mixin({
    toast: true,
    position: 'top-end',
@@ -41,7 +45,6 @@ window.Reload = new Vue();
 
 
 
-// console.log(router.history.current.path
 //   )
  const app = new Vue({
     el: '#app',
@@ -51,6 +54,5 @@ window.Reload = new Vue();
       'sidebar':sideBar,
       'topbar':topBar,
     },
-    // render: h => h(App)
 });
 

@@ -48,19 +48,12 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-       $category =Category::where('id',$id)->first();
+       $category =Category::find($id);
        return response()->json($category);
     }
 
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $validateData = $request->validate([
@@ -68,7 +61,9 @@ class CategoryController extends Controller
     ]   );
         $data = array();
         $data['category_name'] =  $request->category_name;
-       Category::where('id',$id)->update($data);
+        Category::find($id)->update($data);
+        return response()->json(['status'=>'success']);
+
     }
 
     /**
@@ -79,7 +74,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-      Category::where('id',$id)->delete();
+      Category::find($id)->delete();
+      return response()->json(['status'=>'success']);
     }
 }
 

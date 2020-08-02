@@ -124,15 +124,7 @@ const Employee = {
   };
 
     const Reports = {
-
         dateReports: (data) => requests.getWithParams(`/reports/date/reports`,data),
-
-
-
-        // sell: () => requests.get(`/reports/today/sell`),
-        // income: () => requests.get(`/reports/today/income`),
-        // due: () => requests.get(`/reports/today/due`),
-        // expense: () => requests.get(`/reports/today/expense`),
         stockOut: () => requests.get(`/reports/today/stock-out`),
     };
 
@@ -148,13 +140,6 @@ const Order = {
 
 };
 
-const Cart = {
-    add: (id) => requests.get(`/cart/add/${id}`),
-    remove: (id) => requests.get(`/cart/remove/${id}`),
-    products: () => requests.get(`/cart/products`),
-    increment: (id) => requests.get(`/cart/product/increment/${id}`),
-    decrement: (id) => requests.get(`/cart/product/decrement/${id}`),
-};
 
 const User = {
     // current: (): Promise<IUser> => requests.get('/user'),
@@ -177,6 +162,5 @@ export default {
     Reports,
     Regulations,
     Order,
-    Cart
-    // Profiles
+
 }

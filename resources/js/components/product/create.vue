@@ -138,13 +138,13 @@
             <div class="col-md-6">
    <input type="file" class="custom-file-input" id="customFile" @change="onFileSelected">
 
-  <small class="text-danger" v-if="errors.image"> {{ errors.image[0] }} </small>
+  <small class="text-danger" v-if="errors.photo"> {{ errors.photo[0] }} </small>
        <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
 
 
      <div class="col-md-6">
-        <img :src="form.image" style="height: 40px; width: 40px;">
+        <img :src="form.photo" style="height: 40px; width: 40px;">
             </div>
 
           </div>
@@ -179,7 +179,6 @@
 
 
 <script type="text/javascript">
-  import agent from "../../api/agent";
 
 
   export default {
@@ -195,7 +194,7 @@
         buying_price: null,
         selling_price: null,
         buying_date: null,
-        image: null,
+        photo: null,
         product_quantity: null
       },
       errors:{},
@@ -213,7 +212,7 @@
      }else{
       let reader = new FileReader();
       reader.onload = event =>{
-        this.form.image = event.target.result
+        this.form.photo = event.target.result
           console.log(this.form);
       };
       reader.readAsDataURL(file);
@@ -223,7 +222,7 @@ ProductInsert(){
   agent.Product.create(this.form)
       //  axios.post('/api/product',this.form)
        .then(() => {
-        this.$router.push({ name: 'product'})
+        this.$router.push({ name: 'products'})
         Notification.success()
        })
        .catch(error =>this.errors = error.data.errors)

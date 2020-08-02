@@ -38,7 +38,6 @@ class ExpenseController extends Controller
          $expense = new Expense;
          $expense->details = $request->details;
          $expense->amount = $request->amount;
-         $expense->expense_date = date('d/m/y');
 
          $expense->save();
     }
@@ -51,7 +50,7 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
-         $expense = Expense::where('id',$id)->first();
+         $expense = Expense::find($id);
        return response()->json($expense);
     }
 
@@ -72,10 +71,10 @@ class ExpenseController extends Controller
         ]);
 
 
-        $data = array();
-        $data['details'] =  $request->details;
-        $data['amount'] =  $request->amount;
-        Expense::where('id',$id)->update($data);
+        $expense = Expense::find($id);
+        $expense->details =  $request->details;
+        $expense->amount =  $request->amount;
+        $expense->save();
     }
 
     /**
@@ -86,6 +85,6 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-       Expense::where('id',$id)->delete();
+        Expense::find($id)->delete();
     }
 }

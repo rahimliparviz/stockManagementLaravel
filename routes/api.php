@@ -42,17 +42,17 @@ Route::group([
     Route::APIResource('/employees', 'API\EmployeeController');
     Route::APIResource('/suppliers', 'API\SupplierController');
     Route::APIResource('/categories', 'API\CategoryController');
-    Route::Post('/stock/update/{id}', 'API\ProductController@StockUpdate');
+    Route::Post('/stock/update/{id}', 'API\ProductController@stockUpdate');
     Route::APIResource('/expenses', 'API\ExpenseController');
     Route::APIResource('/customers', 'API\CustomerController');
 
 
 //Salary
-    Route::Post('/salary/pay', 'API\SalaryController@Pay');
-    Route::Get('/salary', 'API\SalaryController@AllSalary');
-    Route::Get('/salary/view/{id}', 'API\SalaryController@ViewSalary');
-    Route::Get('/edit/salary/{id}', 'API\SalaryController@EditSalary');
-    Route::Post('/salary/update/{id}', 'API\SalaryController@SalaryUpdate');
+    Route::Post('/salary/pay', 'API\SalaryController@pay');
+    Route::Get('/salary', 'API\SalaryController@allSalary');
+    Route::Get('/salary/view/{id}', 'API\SalaryController@viewSalary');
+    Route::Get('/edit/salary/{id}', 'API\SalaryController@editSalary');
+    Route::Post('/salary/update/{id}', 'API\SalaryController@salaryUpdate');
 
 
 //////////////////////////////////////////////////////////////
@@ -80,10 +80,6 @@ Route::group([
 
 // Reports Route
     Route::Get('reports/date/reports', 'API\ReportsController@dateReports');
-//    Route::Get('reports/today/sell', 'API\ReportsController@todaySell');
-//    Route::Get('reports/today/income', 'API\ReportsController@todayIncome');
-//    Route::Get('reports/today/due', 'API\ReportsController@todayDue');
-//    Route::Get('reports/today/expense', 'API\ReportsController@todayExpense');
     Route::Get('reports/today/stock-out', 'API\ReportsController@stockOut');
 
 });

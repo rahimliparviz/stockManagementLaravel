@@ -121,7 +121,6 @@
 
 
 <script type="text/javascript">
-    import agent from "../../api/agent";
 
 
     export default {
@@ -139,7 +138,7 @@
                     phone: '',
                     address: '',
                     photo: '',
-                    newphoto: ''
+                    newPhotoAdded:false
 
                 },
                 errors: {}
@@ -154,17 +153,17 @@
                 } else {
                     let reader = new FileReader();
                     reader.onload = event => {
-                        this.form.newphoto = event.target.result
+                        this.form.photo = event.target.result
+                        this.form.newPhotoAdded = true;
 
                     };
                     reader.readAsDataURL(file);
                 }
             },
             customerUpdate() {
-                console.log(this.form)
                 agent.Customer.update(this.form)
                     .then(() => {
-                        this.$router.push({name: 'customer'})
+                        this.$router.push({name: 'customers'})
                         Notification.success()
                     })
                     .catch(error => {

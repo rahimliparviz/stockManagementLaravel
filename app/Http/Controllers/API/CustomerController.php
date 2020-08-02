@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Library\Help;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Customer;
 use Image;
+use function GuzzleHttp\Psr7\str;
 
 class CustomerController extends Controller
 {
@@ -17,54 +19,46 @@ class CustomerController extends Controller
      */
     public function index()
     {
-       $customer = Customer::orderBy('id','DESC')->get();
-       return response()->json($customer);
+        $customer = Customer::orderBy('id', 'DESC')->get();
+        return response()->json($customer);
     }
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $validateData = $request->validate([
-         'name' => 'required|unique:customers|max:255',
-         'email' => 'required',
-         'phone' => 'required|unique:customers',
+            'name' => 'required|unique:customers|max:255',
+            'email' => 'required',
+            'phone' => 'required|unique:customers',
 
         ]);
 
-      if ($request->photo) {
-         $position = strpos($request->photo, ';');
-         $sub = substr($request->photo, 0, $position);
-         $ext = explode('/', $sub)[1];
+        if ($request->photo) {
+            $imgUrl = Help::saveImage($request->photo, 'customer');
 
-         $name = time().".".$ext;
-         $img = Image::make($request->photo)->resize(240,200);
-         $upload_path = 'backend/customer/';
-         $image_url = $upload_path.$name;
-         $img->save($image_url);
+            $customer = new Customer;
+            $customer->name = $request->name;
+            $customer->email = $request->email;
+            $customer->phone = $request->phone;
+            $customer->address = $request->address;
+            $customer->photo = $imgUrl;
+            $customer->save();
+        } else {
+            $customer = new Customer;
+            $customer->name = $request->name;
+            $customer->email = $request->email;
+            $customer->phone = $request->phone;
+            $customer->address = $request->address;
 
-         $customer = new Customer;
-         $customer->name = $request->name;
-         $customer->email = $request->email;
-         $customer->phone = $request->phone;
-         $customer->address = $request->address;
-         $customer->photo = $image_url;
-         $customer->save(); 
-     }else{
-         $customer = new Customer;
-         $customer->name = $request->name;
-         $customer->email = $request->email;
-         $customer->phone = $request->phone;
-         $customer->address = $request->address;
-        
-         $customer->save(); 
+            $customer->save();
 
-     } 
+        }
 
 
     }
@@ -72,75 +66,63 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-         $customer = Customer::where('id',$id)->first();
-       return response()->json($customer);
+        $customer = Customer::where('id', $id)->first();
+        return response()->json($customer);
     }
 
-     
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-       $data = array();
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['phone'] = $request->phone;
-        $data['address'] = $request->address;
-        $image = $request->newphoto;
+        //Todo: add validation to each action of all controllers
+        $customer = Customer::find($id);
 
-        if ($image) {
-         $position = strpos($image, ';');
-         $sub = substr($image, 0, $position);
-         $ext = explode('/', $sub)[1];
+        $customer->name = $request->name;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->address = $request->address;
+        $image = $request->photo;
 
-         $name = time().".".$ext;
-         $img = Image::make($image)->resize(240,200);
-         $upload_path = 'backend/customer/';
-         $image_url = $upload_path.$name;
-         $success = $img->save($image_url);
-         
-         if ($success) {
-            $data['photo'] = $image_url;
-            $img = Customer::where('id',$id)->first();
-            $image_path = $img->photo;
-            $done = unlink($image_path);
-            $user  = Customer::where('id',$id)->update($data);
-         }
-          
-        }else{
-            $oldphoto = $request->photo;
-            $data['photo'] = $oldphoto;
-            $user = Customer::where('id',$id)->update($data);
+        if ($request->newPhotoAdded && $image) {
+            $imgUrl = Help::updateModelWithImage($customer, $image, 'customer');
+
+            if ($imgUrl) {
+                $customer->photo = $imgUrl;
+
+            }
+
         }
+
+        $customer->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Customer updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $customer = Customer::where('id',$id)->first();
-       $photo = $customer->photo;
-       if ($photo) {
-         unlink($photo);
-         Customer::where('id',$id)->delete();
-       }else{
-        Customer::where('id',$id)->delete();
-       }
+        $customer = Customer::find($id);
+        $photo = $customer->photo;
+        if ($photo) {
+            unlink(substr($photo, 1));
+        }
+        $customer->delete();
     }
 
 

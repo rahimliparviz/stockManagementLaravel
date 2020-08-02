@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Library\Help;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
 use Image;
@@ -25,124 +26,92 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $validateData = $request->validate([
-         'name' => 'required|unique:suppliers|max:255',
-         'email' => 'required',
-         'phone' => 'required|unique:suppliers',
+            'name' => 'required|unique:suppliers|max:255',
+            'email' => 'required',
+            'phone' => 'required|unique:suppliers',
 
         ]);
+        $supplier = new Supplier;
+        $supplier->name = $request->name;
+        $supplier->email = $request->email;
+        $supplier->phone = $request->phone;
+        $supplier->shop_name = $request->shop_name;
+        $supplier->address = $request->address;
 
         if ($request->photo) {
-         $position = strpos($request->photo, ';');
-         $sub = substr($request->photo, 0, $position);
-         $ext = explode('/', $sub)[1];
+            $imgUrl = Help::saveImage($request->photo, 'supplier');
 
-         $name = time().".".$ext;
-         $img = Image::make($request->photo)->resize(240,200);
-         $upload_path = 'backend/supplier/';
-         $image_url = $upload_path.$name;
-         $img->save($image_url);
+            $supplier->photo = $imgUrl;
+        }
+        $supplier->save();
 
-         $supplier = new Supplier;
-         $supplier->name = $request->name;
-         $supplier->email = $request->email;
-         $supplier->phone = $request->phone;
-         $supplier->shop_name = $request->shop_name;
-         $supplier->address = $request->address;
-         $supplier->photo = $image_url;
-         $supplier->save();
-     }else{
-         $supplier = new Supplier;
-         $supplier->name = $request->name;
-         $supplier->email = $request->email;
-         $supplier->phone = $request->phone;
-         $supplier->shop_name = $request->shop_name;
-         $supplier->address = $request->address;
-
-         $supplier->save();
-
-     }
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-      $supplier = Supplier::where('id',$id)->first();
-       return response()->json($supplier);
+        $supplier = Supplier::find($id);
+        return response()->json($supplier);
     }
-
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $data = array();
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['phone'] = $request->phone;
-        $data['shop_name'] = $request->shop_name;
-        $data['address'] = $request->address;
+        $supplier = Supplier::find($id);
+        $supplier->name = $request->name;
+        $supplier->email = $request->email;
+        $supplier->phone = $request->phone;
+        $supplier->shop_name = $request->shop_name;
+        $supplier->address = $request->address;
 
         $image = $request->newphoto;
 
-        if ($image) {
-         $position = strpos($image, ';');
-         $sub = substr($image, 0, $position);
-         $ext = explode('/', $sub)[1];
+        if ($request->isPhotoChanged && $image) {
+            $imgUrl = Help::updateModelWithImage($supplier, $image, 'supplier');
 
-         $name = time().".".$ext;
-         $img = Image::make($image)->resize(240,200);
-         $upload_path = 'backend/supplier/';
-         $image_url = $upload_path.$name;
-         $success = $img->save($image_url);
+            if ($imgUrl) {
+                $supplier->photo = $imgUrl;
+            }
 
-         if ($success) {
-            $data['photo'] = $image_url;
-            $img = Supplier::where('id',$id)->first();
-            $image_path = $img->photo;
-            $done = unlink($image_path);
-            $user  = Supplier::where('id',$id)->update($data);
-         }
-
-        }else{
-            $oldphoto = $request->photo;
-            $data['photo'] = $oldphoto;
-            $user = Supplier::where('id',$id)->update($data);
         }
+
+        $supplier->save();
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-       $supplier = Supplier::where('id',$id)->first();
-       $photo = $supplier->photo;
-       if ($photo) {
-         unlink($photo);
-         Supplier::where('id',$id)->delete();
-       }else{
-        Supplier::where('id',$id)->delete();
-       }
+        //Todo - delete model with image adli helper metod yarat
+        $supplier = Supplier::find($id);
+        $photo = $supplier->photo;
+        if ($photo) {
+            unlink(substr($photo, 1));
+        }
+        Supplier::where('id', $id)->delete();
     }
 }
