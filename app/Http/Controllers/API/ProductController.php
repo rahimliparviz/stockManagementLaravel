@@ -77,7 +77,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         return response()->json($product);
     }
 
@@ -105,7 +105,7 @@ class ProductController extends Controller
         ]);
 
 
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
 
         $product->product_name = $request->product_name;
         $product->product_code = $request->product_code;
@@ -138,7 +138,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $photo = $product->image;
         if ($photo) {
             unlink(substr($photo,1));
@@ -154,7 +154,7 @@ class ProductController extends Controller
             'product_quantity' => 'required|numeric|min:0',
         ]);
 
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $product->product_quantity = $request->product_quantity;
         $product->save();
 

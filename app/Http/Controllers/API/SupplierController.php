@@ -62,7 +62,7 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::findOrFail($id);
         return response()->json($supplier);
     }
 
@@ -76,7 +76,7 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::findOrFail($id);
         $supplier->name = $request->name;
         $supplier->email = $request->email;
         $supplier->phone = $request->phone;
@@ -107,7 +107,7 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         //Todo - delete model with image adli helper metod yarat
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::findOrFail($id);
         $photo = $supplier->photo;
         if ($photo) {
             unlink(substr($photo, 1));

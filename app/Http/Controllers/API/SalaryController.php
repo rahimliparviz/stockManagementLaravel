@@ -69,7 +69,7 @@ class SalaryController extends Controller
     public function salaryUpdate(Request $request, $id)
     {
 
-        $salary = Salary::find($id);
+        $salary = Salary::findOrFail($id);
         $salary->employee_id = $request->employee_id;
         $salary->amount = $request->amount;
         $salary->salary_month = $request->salary_month;

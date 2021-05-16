@@ -48,7 +48,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-       $category =Category::find($id);
+       $category =Category::findOrFail($id);
        return response()->json($category);
     }
 
@@ -61,7 +61,7 @@ class CategoryController extends Controller
     ]   );
         $data = array();
         $data['category_name'] =  $request->category_name;
-        Category::find($id)->update($data);
+        Category::findOrFail($id)->update($data);
         return response()->json(['status'=>'success']);
 
     }
@@ -74,7 +74,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-      Category::find($id)->delete();
+      Category::findOrFail($id)->delete();
       return response()->json(['status'=>'success']);
     }
 }

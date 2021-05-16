@@ -55,7 +55,7 @@ class OrderController extends Controller
             $newOrderProduct->save();
 
 
-            $product = Product::find($orderProduct['id']);
+            $product = Product::findOrFail($orderProduct['id']);
             $product->product_quantity-=$newOrderProduct->quantity;
             $product->save();
         }

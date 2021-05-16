@@ -71,7 +71,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $customer = Customer::where('id', $id)->first();
+        $customer = Customer::findOrFail($id);
         return response()->json($customer);
     }
 
@@ -85,8 +85,14 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Todo: add validation to each action of all controllers
-        $customer = Customer::find($id);
+        $validateData = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+
+        ]);
+        $customer = Customer::findOrFail($id);
 
         $customer->name = $request->name;
         $customer->email = $request->email;
@@ -117,7 +123,7 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
         $photo = $customer->photo;
         if ($photo) {
             unlink(substr($photo, 1));

@@ -26,7 +26,6 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //TODO : image upload ucun helper function yarat
     public function store(Request $request)
     {
         $validateData = $request->validate([
@@ -75,7 +74,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::findOrFail($id);
         return response()->json($employee);
     }
 
@@ -89,7 +88,14 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $employee = Employee::find($id);
+        $validateData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required',
+            'phone' => 'required',
+
+        ]);
+
+        $employee = Employee::findOrFail($id);
         $employee->name = $request->name;
         $employee->email = $request->email;
         $employee->phone = $request->phone;
@@ -120,7 +126,7 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::findOrFail($id);
         $photo = $employee->photo;
         if ($photo) {
             unlink(substr($photo,1));

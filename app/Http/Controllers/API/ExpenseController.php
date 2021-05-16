@@ -50,7 +50,7 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
-         $expense = Expense::find($id);
+         $expense = Expense::findOrFail($id);
        return response()->json($expense);
     }
 
@@ -71,7 +71,7 @@ class ExpenseController extends Controller
         ]);
 
 
-        $expense = Expense::find($id);
+        $expense = Expense::findOrFail($id);
         $expense->details =  $request->details;
         $expense->amount =  $request->amount;
         $expense->save();
@@ -85,6 +85,6 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        Expense::find($id)->delete();
+        Expense::findOrFail($id)->delete();
     }
 }
